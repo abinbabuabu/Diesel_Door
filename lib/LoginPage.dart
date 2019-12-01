@@ -1,18 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/RoundedTextField.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation _animation;
+  FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(microseconds: 300));
+    _animation = Tween(begin: 200.0, end: 0.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double layoutOneHeight = height / 1.5;
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: layoutOneHeight,
                   width: double.infinity,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -26,15 +59,17 @@ class LoginPage extends StatelessWidget {
                       ),
                       Text(
                         "Petrol Pump",
-                        style:
-                            TextStyle(fontSize: 25, fontFamily: 'Montserrat'),
+                        style: TextStyle(fontSize: 25),
                       )
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
+              SizedBox(
+                height: _animation.value,
+              ) ,
+
+                Container(
+                  height: (height - layoutOneHeight),
                   width: double.infinity,
                   child: Column(
                     children: <Widget>[
@@ -46,14 +81,10 @@ class LoginPage extends StatelessWidget {
                         ),
                         alignment: Alignment.centerLeft,
                       ),
-                      Container(
-                        height: 40,
-                        width: 200,
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Phone Number"),
-                        ),
+
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "I move"),
+                        focusNode: _focusNode,
                       ),
                       RaisedButton(
                         child: Text("Submit"),
@@ -61,9 +92,9 @@ class LoginPage extends StatelessWidget {
                       )
                     ],
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
