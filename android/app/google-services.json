@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "783907190284",
+    "firebase_url": "https://petrolpump-2be38.firebaseio.com",
+    "project_id": "petrolpump-2be38",
+    "storage_bucket": "petrolpump-2be38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783907190284:android:452d3fe69ea2513f37a029",
+        "android_client_info": {
+          "package_name": "com.example.petrol_pump"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783907190284-e8f0prmaj0v6ssik3jsia455l3gucn6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiiR1j3gM_PCYaMxhhfx3jGGyrkDxmsZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783907190284-e8f0prmaj0v6ssik3jsia455l3gucn6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
