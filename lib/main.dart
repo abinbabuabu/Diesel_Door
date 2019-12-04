@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/LoginPage.dart';
+import 'package:petrol_pump/MapPage.dart';
 import 'package:petrol_pump/OtpPage.dart';
 import 'package:petrol_pump/profilePage.dart';
 
@@ -15,10 +16,9 @@ class MyApp extends StatelessWidget {
           primaryColor: Color(0xFF265FFB),
           accentColor: Color(0xFFFAC702)),
 
-      home: LoginPage(),
+      home: MapPage(),
       routes: {
         LoginPage.routeName : (context) => LoginPage(),
-        OtpPage.routeName : (context) => OtpPage(),
         ProfilePage.routeName :(context) => ProfilePage()
       },
     );

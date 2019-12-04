@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/OtpPage.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginPage';
@@ -9,9 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  String verificationId;
-  AuthCredential authCredential;
+  String phone;
 
   bool _visibility = true;
   FocusNode _focusNode = FocusNode();
@@ -26,78 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     _visibility = false;
   }
 
-  void sample() {
 
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int forceResendingToken]) async {
-      this.verificationId = verificationId;
-      setState(() {
-        print("Code Sent");
-      });
-    };
-
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) {
-      this.verificationId = verificationId;
-      setState(() {
-        print("Auto retrieval Time Out");
-      });
-    };
-
-    final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) {
-      String message = authException.message;
-      setState(() {
-        print("Exception, $message");
-      });
-    };
-
-    final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential auth) {
-      this.authCredential = auth;
-      setState(() {
-        print("Authentication Success");
-      });
-
-      firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
-        if(value.user != null){
-          setState(() {
-            print("Authentication Success");
-          });
-        }
-        else{
-          setState(() {
-            print("Invalid Authentication Code");
-          });
-        }
-      }).catchError((onError){
-        setState(() {
-          print("Error $onError");
-        });
-      });
-    };
-
-    firebaseAuth.verifyPhoneNumber(
-        phoneNumber: "+919656795221",
-        timeout: Duration(seconds: 20),
-        verificationCompleted: verificationCompleted,
-        verificationFailed:verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-  }
-
-
-  void SignInWithPhoneNumber(String smsCode) async{
-    var _authCredential = await PhoneAuthProvider.getCredential(verificationId: verificationId, smsCode: smsCode);
-
-    firebaseAuth.signInWithCredential(_authCredential).catchError((onError){
-      setState(() {
-        print("Error In Manual Login");
-      });
-    }).then((onValue){
-      print(onValue.user.displayName);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               hintText: "Phone Number"),
                           focusNode: _focusNode,
+                          onChanged: (text) {
+                            phone = text;
+                          },
                         ),
                       ),
                       ButtonTheme(
@@ -197,8 +128,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: RaisedButton(
                           color: Theme.of(context).accentColor,
                           onPressed: () {
-//                            Navigator.pushNamed(context, OtpPage.routeName);
-                          sample();
+                            if(phone.length ==  10) {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => OtpPage("+91$phone")
+                              ),
+                              );
+                            }
                           },
                           child: Text(
                             "Submit",
@@ -218,4 +153,10 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class LoginArguments {
+  final String phoneNumber;
+
+  LoginArguments(this.phoneNumber);
 }
