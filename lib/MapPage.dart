@@ -2,25 +2,59 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petrol_pump/CustomButton.dart';
+import 'package:google_maps_webservice/geolocation.dart';
 import 'package:petrol_pump/RoundButton.dart';
 import 'package:petrol_pump/SearchView.dart';
 
 const googleApiKey = "AIzaSyACxC2oh38YG2SxmdMpRPPhpFaWAbP6TyY";
 
 class MapPage extends StatefulWidget {
+  Future<GeolocationStatus> geolocationStatus;
+
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  GoogleMapController controller;
+  static const LatLng _center = const LatLng(55.521563, -122.677433);
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    controller = controller;
     print("Map Created");
+  }
+
+  Future<GeolocationStatus> _getLocationPermission() async {
+    GeolocationStatus geolocationStatus =
+        await Geolocator().checkGeolocationPermissionStatus();
+    return geolocationStatus;
+  }
+
+  Future<Position> _getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude,position.longitude)))
+      );
+    });
+
+    print("Latitude: ${position.latitude}, Logitude ${position.longitude}") ;
+    print("Clicked Fab");
+    return position;
+  }
+
+  void _cameraMove(CameraPosition position){
+
+  }
+
+  @override
+  void initState() {
+    widget.geolocationStatus = _getLocationPermission();
+    super.initState();
   }
 
   @override
@@ -34,13 +68,16 @@ class _MapPageState extends State<MapPage> {
               onMapCreated: _onMapCreated,
               initialCameraPosition:
                   CameraPosition(target: _center, zoom: 11.0),
+
             ),
             GestureDetector(
               onTap: () {
                 setState(() {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => SearchView(googleApiKey)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchView(googleApiKey)));
                 });
-
               },
               child: AbsorbPointer(
                 child: Align(
@@ -71,7 +108,20 @@ class _MapPageState extends State<MapPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                RoundButton(),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      elevation: 8.0,
+                      child: Icon(Icons.my_location),
+                      onPressed: () {
+                        _getLocation();
+                      },
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(

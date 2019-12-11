@@ -1,24 +1,24 @@
 import 'package:flutter/cupertino.dart';
 
-class CoupledTextOrder extends StatelessWidget {
+class CoupledTextProfile extends StatelessWidget {
   String label;
   String value;
   var color;
 
-  CoupledTextOrder({@required this.label, @required this.value, this.color});
+  CoupledTextProfile({@required this.label, @required this.value, this.color});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8.0, left: 8.0, right: 16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Align(
             child: Text(
-              label,
+              label.toUpperCase(),
               softWrap: true,
-              style: TextStyle(fontSize: 12, fontFamily: "MontserratLight"),
+              style: TextStyle(fontSize: 11, fontFamily: "MontserratLight"),
             ),
             alignment: Alignment.centerLeft,
           ),

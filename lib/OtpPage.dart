@@ -17,70 +17,74 @@ class OtpPage extends StatefulWidget {
   _OtpPageState createState() => _OtpPageState();
 
 
-
 }
 
 class _OtpPageState extends State<OtpPage> {
+  String _otp;
+
   @override
   void initState() {
     super.initState();
-      final PhoneCodeSent codeSent =
-          (String verificationId, [int forceResendingToken]) async {
-        widget.veriId = verificationId;
-      };
+    final PhoneCodeSent codeSent =
+        (String verificationId, [int forceResendingToken]) async {
+      widget.veriId = verificationId;
+    };
 
-      final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-          (String verificationId) {
-       widget.veriId = verificationId;
-      };
+    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      widget.veriId = verificationId;
+    };
 
-      final PhoneVerificationFailed verificationFailed =
-          (AuthException authException) {
-       setState(() {
-         print(authException.message);
-       });
-      };
+    final PhoneVerificationFailed verificationFailed =
+        (AuthException authException) {
+      setState(() {
+        print(authException.message);
+      });
+    };
 
-      final PhoneVerificationCompleted verificationCompleted =
-          (AuthCredential auth) {
-        widget.firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
-          if (value.user != null) {
+    final PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential auth) {
+      widget.firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
+        if (value.user != null) {
+          setState(() {
+            Navigator.pushNamed(context, ProfilePage.routeName);
+          });
+        } else {
 
-            setState(() {
+        }
+      }).catchError((onError) {});
+    };
 
-            });
-
-          } else {
-
-          }
-        }).catchError((onError) {});
-      };
-
-      widget.firebaseAuth.verifyPhoneNumber(
-          phoneNumber: "+919656795221",
-          timeout: Duration(seconds: 20),
-          verificationCompleted: verificationCompleted,
-          verificationFailed: verificationFailed,
-          codeSent: codeSent,
-          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-
-
+    widget.firebaseAuth.verifyPhoneNumber(
+        phoneNumber: widget.phoneNumber,
+        timeout: Duration(seconds: 20),
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
   }
 
   @override
   Widget build(BuildContext context) {
-
     void SignInWithPhoneNumber(String smsCode) async {
-      var _authCredential = PhoneAuthProvider.getCredential(verificationId: widget.veriId, smsCode: smsCode);
-       await widget.firebaseAuth.signInWithCredential(_authCredential).catchError((onError){
-      }).then((onValue){
-        if(onValue  != null){
+      var _authCredential = PhoneAuthProvider.getCredential(
+          verificationId: widget.veriId, smsCode: smsCode);
+      await widget.firebaseAuth.signInWithCredential(_authCredential)
+          .catchError((onError) {}).then((onValue) {
+        if (onValue != null) {
           print(onValue.user.phoneNumber);
+          setState(() {
+            Navigator.pushNamed(context, ProfilePage.routeName);
+          });
+
         }
       });
     }
 
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
       body: SafeArea(
@@ -99,7 +103,10 @@ class _OtpPageState extends State<OtpPage> {
                     Positioned(
                       bottom: 0,
                       child: Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         child: Image.asset(
                           'assets/building.png',
                           fit: BoxFit.fill,
@@ -119,7 +126,9 @@ class _OtpPageState extends State<OtpPage> {
                           Expanded(
                             child: Text("OTP Verification",
                                 style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor,
                                     fontSize: 20)),
                             flex: 4,
                           ),
@@ -136,7 +145,8 @@ class _OtpPageState extends State<OtpPage> {
                             fieldsCount: 6,
                             unFocusWhen: false,
                             actionButtonsEnabled: false,
-                            onSubmit: (number){
+                            onSubmit: (number) {
+                              _otp = number;
                               SignInWithPhoneNumber(number);
                             },
                           ),
@@ -148,8 +158,11 @@ class _OtpPageState extends State<OtpPage> {
                           height: 43,
                           minWidth: double.infinity,
                           child: RaisedButton(
-                            color: Theme.of(context).accentColor,
+                            color: Theme
+                                .of(context)
+                                .accentColor,
                             onPressed: () {
+                              SignInWithPhoneNumber(_otp);
                             },
                             child: Text(
                               "Submit",

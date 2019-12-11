@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/OtpPage.dart';
 
@@ -157,6 +156,5 @@ class _LoginPageState extends State<LoginPage> {
 
 class LoginArguments {
   final String phoneNumber;
-
   LoginArguments(this.phoneNumber);
 }

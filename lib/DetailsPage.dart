@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/MapPage.dart';
+import 'package:petrol_pump/OrdersPage.dart';
+import 'package:petrol_pump/PersonalisePage.dart';
 
 class DetailsPage extends StatefulWidget {
   @override
@@ -11,8 +13,8 @@ class _DetailsPageState extends State<DetailsPage> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     MapPage(),
-    Container(color: Colors.red,),
-    Container(color: Colors.green)
+    OrdersPage(),
+    PersonalisePage()
   ];
 
   void _onTapped(int index){
