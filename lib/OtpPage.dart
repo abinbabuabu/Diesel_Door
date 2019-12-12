@@ -1,17 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/LoginProvider.dart';
 import 'package:petrol_pump/profilePage.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:provider/provider.dart';
 
 class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
-  final String phoneNumber;
-  String veriId;
-  final firebaseAuth = FirebaseAuth.instance;
-
-
-  OtpPage(this.phoneNumber);
 
   @override
   _OtpPageState createState() => _OtpPageState();
@@ -23,65 +19,22 @@ class _OtpPageState extends State<OtpPage> {
   String _otp;
 
   @override
-  void initState() {
-    super.initState();
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int forceResendingToken]) async {
-      widget.veriId = verificationId;
-    };
-
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) {
-      widget.veriId = verificationId;
-    };
-
-    final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) {
-      setState(() {
-        print(authException.message);
-      });
-    };
-
-    final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential auth) {
-      widget.firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
-        if (value.user != null) {
-          setState(() {
-            Navigator.pushNamed(context, ProfilePage.routeName);
-          });
-        } else {
-
-        }
-      }).catchError((onError) {});
-    };
-
-    widget.firebaseAuth.verifyPhoneNumber(
-        phoneNumber: widget.phoneNumber,
-        timeout: Duration(seconds: 20),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    void SignInWithPhoneNumber(String smsCode) async {
-      var _authCredential = PhoneAuthProvider.getCredential(
-          verificationId: widget.veriId, smsCode: smsCode);
-      await widget.firebaseAuth.signInWithCredential(_authCredential)
-          .catchError((onError) {}).then((onValue) {
-        if (onValue != null) {
-          print(onValue.user.phoneNumber);
-          setState(() {
-            Navigator.pushNamed(context, ProfilePage.routeName);
-          });
 
-        }
-      });
-    }
+    var provider = Provider.of<LoginProvider>(context);
+    var auth = provider.auth;
+    var phoneNumber = provider.phoneNumber;
 
-    double height = MediaQuery
+    auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        timeout: Duration(seconds: 20),
+        verificationCompleted: provider.verificationCompleted,
+        verificationFailed:provider.verificationFailed,
+        codeSent: provider.codeSent,
+        codeAutoRetrievalTimeout: provider.codeAutoRetrievalTimeout);
+
+
+  double height = MediaQuery
         .of(context)
         .size
         .height;
@@ -147,7 +100,7 @@ class _OtpPageState extends State<OtpPage> {
                             actionButtonsEnabled: false,
                             onSubmit: (number) {
                               _otp = number;
-                              SignInWithPhoneNumber(number);
+                             provider.SignInWithPhoneNumber(_otp);
                             },
                           ),
                         ),
@@ -162,7 +115,7 @@ class _OtpPageState extends State<OtpPage> {
                                 .of(context)
                                 .accentColor,
                             onPressed: () {
-                              SignInWithPhoneNumber(_otp);
+                             provider.SignInWithPhoneNumber(_otp);
                             },
                             child: Text(
                               "Submit",

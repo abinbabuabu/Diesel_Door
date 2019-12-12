@@ -35,20 +35,12 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<Position> _getLocation() async {
-    Position position = await Geolocator()
+    var position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude,position.longitude)))
-      );
-    });
 
-    print("Latitude: ${position.latitude}, Logitude ${position.longitude}") ;
+    print("Latitude: ${position.latitude}, Logitude ${position.longitude}");
     print("Clicked Fab");
     return position;
-  }
-
-  void _cameraMove(CameraPosition position){
-
   }
 
   @override
@@ -68,7 +60,6 @@ class _MapPageState extends State<MapPage> {
               onMapCreated: _onMapCreated,
               initialCameraPosition:
                   CameraPosition(target: _center, zoom: 11.0),
-
             ),
             GestureDetector(
               onTap: () {
@@ -117,7 +108,16 @@ class _MapPageState extends State<MapPage> {
                       elevation: 8.0,
                       child: Icon(Icons.my_location),
                       onPressed: () {
-                        _getLocation();
+                        _getLocationPermission();
+                        var position = _getLocation();
+                        setState(() {
+                          position.then((value) {
+                            controller.animateCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                                    target: LatLng(
+                                        value.latitude, value.longitude))));
+                          });
+                        });
                       },
                     ),
                   ),

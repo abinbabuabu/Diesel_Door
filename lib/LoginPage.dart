@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/LoginProvider.dart';
 import 'package:petrol_pump/OtpPage.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginPage';
@@ -128,10 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Theme.of(context).accentColor,
                           onPressed: () {
                             if(phone.length ==  10) {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => OtpPage("+91$phone")
-                              ),
-                              );
+                              Provider.of<LoginProvider>(context).phoneNumber = phone;
                             }
                           },
                           child: Text(

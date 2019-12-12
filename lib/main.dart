@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/DetailsPage.dart';
+import 'package:petrol_pump/HomePage.dart';
 import 'package:petrol_pump/LoginPage.dart';
+import 'package:petrol_pump/MapPage.dart';
 import 'package:petrol_pump/profilePage.dart';
 
 void main() => runApp(MyApp());
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
           fontFamily: "Montserrat",
           primaryColor: Color(0xFF265FFB),
           accentColor: Color(0xFFFAC702)),
-      home:LoginPage(),
+      home:HomePage(),
       routes: {
         LoginPage.routeName: (context) => LoginPage(),
         ProfilePage.routeName: (context) => ProfilePage()
