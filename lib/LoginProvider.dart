@@ -6,7 +6,8 @@ enum Status {
   Authenticated,
   Authenticating,
   Unauthenticated,
-  PhoneNumberEntered
+  PhoneNumberEntered,
+  AuthenticatedNewUser
 }
 
 class LoginProvider with ChangeNotifier {
@@ -72,7 +73,13 @@ class LoginProvider with ChangeNotifier {
     _verificationCompleted = (AuthCredential auth) {
       _auth.signInWithCredential(auth).then((AuthResult value) {
         if (value.user != null) {
-          _status = Status.Authenticated;
+          if(value.additionalUserInfo.isNewUser){
+            _status = Status.AuthenticatedNewUser;
+          }
+          else{
+            _status = Status.Authenticated;
+          }
+
         } else {
           _status = Status.Unauthenticated;
         }
@@ -87,7 +94,6 @@ class LoginProvider with ChangeNotifier {
       _status = Status.Unauthenticated;
     } else {
       _user = firebaseUser;
-      _status = Status.Authenticated;
     }
     notifyListeners();
   }

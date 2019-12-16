@@ -4,6 +4,7 @@ import 'package:petrol_pump/LoginPage.dart';
 import 'package:petrol_pump/LoginProvider.dart';
 import 'package:petrol_pump/MapPage.dart';
 import 'package:petrol_pump/OtpPage.dart';
+import 'package:petrol_pump/profilePage.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,13 +24,15 @@ class HomePage extends StatelessWidget {
               return LoginPage();
             case Status.Authenticated:
               print("Authenticated");
-              return DetailsPage();
+              return ProfilePage();
             case Status.Authenticating:
               print("Athenticating");
               break;
             case Status.PhoneNumberEntered:
               print("Phone Entered");
               return OtpPage();
+            case Status.AuthenticatedNewUser:
+              return ProfilePage();
           }
         },
       ),

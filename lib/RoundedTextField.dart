@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedTextField extends StatelessWidget {
-  RoundedTextField(this.iconValue,this.hintText):super();
+  RoundedTextField(this._iconValue,this._hintText,{@required this.controller}):super();
 
-  final IconData iconValue;
-  final String hintText;
+  final IconData _iconValue;
+  final String _hintText;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +16,16 @@ class RoundedTextField extends StatelessWidget {
       height: 60,
       width: double.infinity,
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
-            prefixIcon: new Icon(iconValue),
+            prefixIcon: new Icon(_iconValue),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.0),
               borderSide: BorderSide(color: Colors.red),
             ),
-            hintText: hintText),
+            hintText: _hintText),
       ),
     );
   }
 }
+
