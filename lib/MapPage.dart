@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petrol_pump/CustomSearch.dart';
-import 'package:petrol_pump/SearchView.dart';
 import 'package:provider/provider.dart';
 import 'MapProvider.dart';
 
@@ -40,6 +39,8 @@ class _MapPageState extends State<MapPage> {
         child: Stack(
           children: <Widget>[
             GoogleMap(
+              myLocationButtonEnabled: false,
+              myLocationEnabled: true,
               onMapCreated: provider.onMapCreated,
               initialCameraPosition:
               CameraPosition(target: _center, zoom: 11.0),
@@ -88,7 +89,7 @@ class _MapPageState extends State<MapPage> {
                       elevation: 8.0,
                       child: Icon(Icons.my_location),
                       onPressed: () {
-                       provider.getLocationPermission();
+                        provider.getLocationPermission();
                       },
                     ),
                   ),

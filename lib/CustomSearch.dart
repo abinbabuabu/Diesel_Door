@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:petrol_pump/SearchItem.dart';
+import 'package:provider/provider.dart';
+
+import 'GooglePlacesProvider.dart';
 
 const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 const baseUrl = "http://maps.googleapis.com";
 
 class CustomSearch extends SearchDelegate {
-  final places = new GoogleMapsPlaces(apiKey: googleApiKey);
+  var provider;
 
   @override
   List<Widget> buildActions(BuildContext context) {
+    provider = Provider.of<PlacesProvider>(context);
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -32,22 +36,20 @@ class CustomSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<SearchResult> result = List();
+    print("Search Pressed");
     return FutureBuilder(
-        future: autoCompleteSearch(query),
-        builder: (BuildContext context,
-            AsyncSnapshot<PlacesAutocompleteResponse> snapshot) {
+        future: provider.autoCompleteSearch(query),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<SearchResult>> snapshot) {
           if (snapshot.hasData) {
-            var data = snapshot.data;
-            for (var i in data.predictions) {
-              var _searchResult = SearchResult(i.description,"","");
-              result.add(_searchResult);
-            }
+            List<SearchResult> result = snapshot.data;
             return ListView.builder(
                 itemCount: result.length,
                 itemBuilder: (context, index) {
                   var item = result[index];
-                  return SearchItem(item: item,);
+                  return SearchItem(
+                    item: item,
+                  );
                 });
           } else {
             return Container();
@@ -58,10 +60,5 @@ class CustomSearch extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return Container();
-  }
-
-  Future<PlacesAutocompleteResponse> autoCompleteSearch(String text) async {
-    PlacesAutocompleteResponse response = await places.autocomplete(text);
-    return response;
   }
 }

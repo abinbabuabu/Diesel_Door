@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/DetailsPage.dart';
+import 'package:petrol_pump/GooglePlacesProvider.dart';
 import 'package:petrol_pump/HomePage.dart';
 import 'package:petrol_pump/LoginPage.dart';
 import 'package:petrol_pump/profilePage.dart';
@@ -16,9 +17,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoginProvider>(create: (_)=> LoginProvider.instance(),),
-        ChangeNotifierProvider<FirebaseProvider>(create: (_)=>FirebaseProvider.instance(),),
-        ChangeNotifierProvider<MapProvider>(create: (_)=>MapProvider(),)
+        ChangeNotifierProvider<LoginProvider>(
+          create: (_) => LoginProvider.instance(),
+        ),
+        ChangeNotifierProvider<FirebaseProvider>(
+          create: (_) => FirebaseProvider.instance(),
+        ),
+        ChangeNotifierProvider<MapProvider>(
+          create: (_) => MapProvider(),
+        ),
+        ChangeNotifierProvider<PlacesProvider>(
+          create: (_) => PlacesProvider.instance(),
+        )
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -29,8 +39,8 @@ class MyApp extends StatelessWidget {
         routes: {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),
-          DetailsPage.routeName : (context) => DetailsPage(),
-          HomePage.routeName:(context) => HomePage()
+          DetailsPage.routeName: (context) => DetailsPage(),
+          HomePage.routeName: (context) => HomePage()
         },
       ),
     );

@@ -93,8 +93,19 @@ class LoginProvider with ChangeNotifier {
   Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
+      print("UnAuthenicated from Auth state");
     } else {
       _user = firebaseUser;
+      if(firebaseUser.metadata.lastSignInTime == firebaseUser.metadata.creationTime){
+        print(firebaseUser.metadata.lastSignInTime);
+        print(firebaseUser.metadata.creationTime);
+        print("new User From Auth State");
+        _status = Status.AuthenticatedNewUser;
+      }
+      else {
+        print("Authenticated from Firebase");
+        _status = Status.Authenticated;
+      }
     }
     notifyListeners();
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:petrol_pump/LoginProvider.dart';
 import 'package:petrol_pump/OtpPage.dart';
 import 'package:provider/provider.dart';
@@ -111,6 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                         height: 52,
                         width: double.infinity,
                         child: TextField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10)
+                          ],
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),

@@ -23,17 +23,13 @@ class FirebaseProvider with ChangeNotifier {
 
   bool get isUserAdded => _isUserAdded;
 
-  FirebaseProvider.instance() : _db = FirebaseDatabase.instance.reference() {
-    FirebaseAuth.instance.currentUser().then((user) {
-      _user = user;
-      _db.child(_user.uid);
-    });
-  }
+  FirebaseProvider.instance() : _db = FirebaseDatabase.instance.reference() ;
 
   Future<bool> fireInsertUser(UserDetails user) async {
+   _user = await FirebaseAuth.instance.currentUser();
     print("Called");
     print(user.phone);
-    _db.child("UserDetails").push().set(<String, String>{
+    _db.child(_user.uid).child("UserDetails").push().set(<String, String>{
       "name": user.name,
       "organisation": user.organisation,
       "phone": user.phone,
@@ -47,8 +43,13 @@ class FirebaseProvider with ChangeNotifier {
   void fireDelete() {}
 
   Future<UserDetails> fireRetrieveUserDetails() async {
+     FirebaseAuth.instance.currentUser().then((value){
+       if(value == null)
+         print("User value is null");
+       print(value.uid);
+     });
     print("called Retrieve UserDetails ");
-    var _userDetails = _db.child("UserDetails");
+    var _userDetails = _db.child(_user.uid).child("UserDetails");
     var snapShot = await _userDetails.once();
     var result = snapShot.value as Map<dynamic, dynamic>;
     print(result);
