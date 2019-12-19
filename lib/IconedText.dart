@@ -1,25 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/HomePage.dart';
+import 'package:provider/provider.dart';
+
+import 'LoginProvider.dart';
 
 class IconedText extends StatelessWidget {
   String text;
   var icon;
+  bool islogout;
 
-  IconedText({@required this.text,@required this.icon});
+  IconedText({@required this.text,@required this.icon, @required this.islogout});
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: GestureDetector(
         onTap: () {
-          print("Clicked");
         },
         child: Container(
           margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0),
           child: Column(
             children: <Widget>[
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  print("clicked");
+                  if(islogout){
+                    Provider.of<LoginProvider>(context).logout().then((value){
+                      Navigator.popAndPushNamed(context, HomePage.routeName);
+                    });
+                  }
+                },
                 splashColor: Colors.blueGrey,
                 child: Container(
                   padding: EdgeInsets.all(8.0),

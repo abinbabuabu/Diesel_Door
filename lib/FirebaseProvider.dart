@@ -7,6 +7,21 @@ import 'UserDetails.dart';
 class FirebaseProvider with ChangeNotifier {
   DatabaseReference _db;
   FirebaseUser _user;
+  bool _isUserAdded = false;
+  UserDetails _userData = null;
+
+  set userData(UserDetails newValue){
+    _userData = newValue;
+  }
+
+  UserDetails get userData => _userData;
+
+
+  set isUserAdded(bool newValue) {
+    _isUserAdded = newValue;
+  }
+
+  bool get isUserAdded => _isUserAdded;
 
   FirebaseProvider.instance() : _db = FirebaseDatabase.instance.reference() {
     FirebaseAuth.instance.currentUser().then((user) {
@@ -15,7 +30,7 @@ class FirebaseProvider with ChangeNotifier {
     });
   }
 
-  void fireInsertUser(UserDetails user) {
+  Future<bool> fireInsertUser(UserDetails user) async {
     print("Called");
     print(user.phone);
     _db.child("UserDetails").push().set(<String, String>{
@@ -24,16 +39,22 @@ class FirebaseProvider with ChangeNotifier {
       "phone": user.phone,
       "email": user.email,
       "gst": user.gst
+    }).then((value) {
+      return true;
     });
   }
 
   void fireDelete() {}
 
-  UserDetails fireRetrieveUserDetails() {
-    var UserDetails =_db.child("UserDetails");
-    if(UserDetails!=null){
-      var snapShot = UserDetails.onValue;
-      print(snapShot.toString());
-    }
+  Future<UserDetails> fireRetrieveUserDetails() async {
+    print("called Retrieve UserDetails ");
+    var _userDetails = _db.child("UserDetails");
+    var snapShot = await _userDetails.once();
+    var result = snapShot.value as Map<dynamic, dynamic>;
+    print(result);
+    result.forEach((key, value) {
+      userData = UserDetails.fromDb(value);
+    });
+    return userData;
   }
 }

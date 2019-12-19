@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:petrol_pump/CoupledTextProfile.dart';
 
 class ProfileCard extends StatelessWidget {
+  String name;
+  String gst;
+  String org;
+  String email;
+  String phone;
+
+  ProfileCard(
+      {@required this.name,
+      @required this.email,
+      @required this.phone,
+      @required this.gst,
+      @required this.org});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -30,10 +43,10 @@ class ProfileCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Abin Babu",
+                      name,
                       style: TextStyle(fontSize: 20),
                     ),
-                    Text("Emilda Solutions Private Limited"),
+                    Text(org),
                     SizedBox(
                       height: 24,
                     ),
@@ -43,11 +56,11 @@ class ProfileCard extends StatelessWidget {
                       children: <Widget>[
                         CoupledTextProfile(
                           label: "EmailId",
-                          value: "abinbabuabk@gmail.com",
+                          value: email,
                         ),
                         CoupledTextProfile(
                           label: "Gstno",
-                          value: "3AAAX453232TN",
+                          value: gst,
                         )
                       ],
                     ),
@@ -56,7 +69,7 @@ class ProfileCard extends StatelessWidget {
                     ),
                     CoupledTextProfile(
                       label: "Phone Number",
-                      value: "9656795221",
+                      value: phone,
                     )
                   ],
                 ),

@@ -1,15 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/FirebaseProvider.dart';
 import 'package:petrol_pump/IconedText.dart';
 import 'package:petrol_pump/ProfileCard.dart';
+import 'package:provider/provider.dart';
 
-class PersonalisePage extends StatelessWidget {
+import 'UserDetails.dart';
+
+class PersonalisePage extends StatefulWidget {
+  @override
+  _PersonalisePageState createState() => _PersonalisePageState();
+}
+
+class _PersonalisePageState extends State<PersonalisePage> {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<FirebaseProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(right: 8.0, left: 8.0,top: 16.0),
+          margin: EdgeInsets.only(right: 8.0, left: 8.0, top: 16.0),
           child: Column(
             children: <Widget>[
               Center(
@@ -21,10 +32,36 @@ class PersonalisePage extends StatelessWidget {
               SizedBox(
                 height: 8,
               ),
-              ProfileCard(),
-              SizedBox(height:100),
-              IconedText(icon: Icons.contact_mail,text: "My Addresses",),
-              IconedText(icon:Icons.arrow_back ,text:"Logout",)
+              FutureBuilder(
+                future: provider.fireRetrieveUserDetails(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<UserDetails> snapshot) {
+                  if (snapshot.hasData) {
+                    var details = snapshot.data;
+                    return ProfileCard(
+                      name: details.name,
+                      email: details.email,
+                      phone: details.phone,
+                      gst: details.gst,
+                      org: details.organisation,
+                    );
+                  } else {
+                    return ProfileCard(
+                        name: "", gst: "", org: "", email: "", phone: "");
+                  }
+                },
+              ),
+              SizedBox(height: 100),
+              IconedText(
+                icon: Icons.contact_mail,
+                text: "My Addresses",
+                islogout: false,
+              ),
+              IconedText(
+                icon: Icons.arrow_back,
+                text: "Logout",
+                islogout: true,
+              )
             ],
           ),
         ),

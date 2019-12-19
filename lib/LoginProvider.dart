@@ -74,6 +74,7 @@ class LoginProvider with ChangeNotifier {
       _auth.signInWithCredential(auth).then((AuthResult value) {
         if (value.user != null) {
           if(value.additionalUserInfo.isNewUser){
+            print("New User");
             _status = Status.AuthenticatedNewUser;
           }
           else{
@@ -114,4 +115,8 @@ class LoginProvider with ChangeNotifier {
       }
     });
   }
+
+   Future<dynamic> logout() async {
+     return _auth.signOut();
+   }
 }

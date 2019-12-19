@@ -7,7 +7,7 @@ import 'package:location/location.dart' as LocationManager;
 
 class MapProvider with ChangeNotifier {
   final geolocator = Geolocator()..forceAndroidLocationManager;
-  Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController _controller;
 
   String sample = "Testing Map";
 
@@ -15,7 +15,7 @@ class MapProvider with ChangeNotifier {
 
   Set<Marker> get markers => _markers;
 
-  Completer<GoogleMapController> get controller => _controller;
+  GoogleMapController get controller => _controller;
 
   void getLocationPermission() async {
     var location = LocationManager.Location();
@@ -43,8 +43,8 @@ class MapProvider with ChangeNotifier {
   }
 
   void onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-    if (_controller.isCompleted)
+    _controller = controller;
+    if (_controller != null)
       getLocationPermission();
     else
       print("not Completed");
@@ -60,12 +60,10 @@ class MapProvider with ChangeNotifier {
 
   void _cameraMoveMap(Position position) {
     print("inside Camera move");
-    if (_controller.isCompleted) {
+    if (_controller != null) {
       print("completer Checked ");
-      _controller.future.then((map) {
-        map.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(position.latitude, position.longitude),zoom: 16)));
-      });
+      _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: LatLng(position.latitude, position.longitude),zoom: 16)));
     }
   }
 }
