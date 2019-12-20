@@ -8,7 +8,7 @@ import 'package:petrol_pump/CustomSearch.dart';
 import 'package:petrol_pump/Dataclass.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
-import 'MapProvider.dart';
+import '../small_ui_components/MapProvider.dart';
 
 const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 

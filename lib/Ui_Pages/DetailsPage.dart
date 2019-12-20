@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/MapPage.dart';
-import 'package:petrol_pump/MapProvider.dart';
-import 'package:petrol_pump/OrdersPage.dart';
-import 'package:petrol_pump/PersonalisePage.dart';
+import 'package:petrol_pump/Ui_Pages/MapPage.dart';
+import 'package:petrol_pump/small_ui_components/MapProvider.dart';
+import 'package:petrol_pump/Ui_Pages/OrdersPage.dart';
+import 'package:petrol_pump/Ui_Pages/PersonalisePage.dart';
 import 'package:provider/provider.dart';
 
 class DetailsPage extends StatefulWidget {

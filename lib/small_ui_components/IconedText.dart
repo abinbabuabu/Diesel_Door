@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/HomePage.dart';
+import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:provider/provider.dart';
 
-import 'LoginProvider.dart';
+import '../Providers/LoginProvider.dart';
 
 class IconedText extends StatelessWidget {
   String text;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrol_pump/LoginProvider.dart';
-import 'package:petrol_pump/OtpPage.dart';
+import 'package:petrol_pump/Providers/LoginProvider.dart';
+import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {

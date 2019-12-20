@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:petrol_pump/DetailsPage.dart';
-import 'package:petrol_pump/FirebaseProvider.dart';
-import 'package:petrol_pump/RoundedTextField.dart';
-import 'package:petrol_pump/UserDetails.dart';
+import 'package:petrol_pump/Dataclass.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/small_ui_components/RoundedTextField.dart';
 import 'package:provider/provider.dart';
 
-import 'LoginProvider.dart';
+import '../Providers/LoginProvider.dart';
 
 class ProfilePage extends StatefulWidget {
   static const routeName = "ProfilePage";

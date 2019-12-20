@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/FirebaseProvider.dart';
-import 'package:petrol_pump/IconedText.dart';
-import 'package:petrol_pump/ProfileCard.dart';
+import 'package:petrol_pump/Dataclass.dart';
+import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/small_ui_components/IconedText.dart';
+import 'package:petrol_pump/small_ui_components/ProfileCard.dart';
 import 'package:provider/provider.dart';
 
-import 'UserDetails.dart';
 
 class PersonalisePage extends StatefulWidget {
   @override

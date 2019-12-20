@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
-import 'package:petrol_pump/SearchItem.dart';
+import 'package:petrol_pump/small_ui_components/SearchItem.dart';
 import 'package:provider/provider.dart';
 
-import 'GooglePlacesProvider.dart';
+import 'Providers/GooglePlacesProvider.dart';
 
 const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 const baseUrl = "http://maps.googleapis.com";

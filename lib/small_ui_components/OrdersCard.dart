@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:petrol_pump/CoupledTextOrder.dart';
+import 'package:petrol_pump/small_ui_components/CoupledTextOrder.dart';
 
 const labelOrderId = "Order Id";
 const labelOrderDate = "Order Date";

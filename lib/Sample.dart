@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:petrol_pump/OrdersCard.dart';
+import 'package:petrol_pump/small_ui_components/OrdersCard.dart';
 
 class Sample extends StatelessWidget {
   @override

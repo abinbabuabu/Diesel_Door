@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/DetailsPage.dart';
-import 'package:petrol_pump/GooglePlacesProvider.dart';
-import 'package:petrol_pump/HomePage.dart';
-import 'package:petrol_pump/LoginPage.dart';
-import 'package:petrol_pump/profilePage.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
+import 'package:petrol_pump/Ui_Pages/HomePage.dart';
+import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
+import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
-import 'FirebaseProvider.dart';
-import 'LoginProvider.dart';
-import 'MapProvider.dart';
+import 'Providers/FirebaseProvider.dart';
+import 'Providers/LoginProvider.dart';
+import 'small_ui_components/MapProvider.dart';
 
 void main() => runApp(MyApp());
 

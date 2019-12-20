@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/CoupledTextProfile.dart';
+import 'package:petrol_pump/small_ui_components/CoupledTextProfile.dart';
 
 class ProfileCard extends StatelessWidget {
   String name;

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/LoginProvider.dart';
-import 'package:petrol_pump/profilePage.dart';
+import 'package:petrol_pump/Providers/LoginProvider.dart';
+import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 
