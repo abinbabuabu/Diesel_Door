@@ -1,27 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Dataclass.dart';
 
 class SearchItem extends StatelessWidget {
-  SearchResult item;
+  PredictionResult item;
 
   SearchItem({@required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        height: 40,
-        child: Center(child: Text(item.desc)),
-      ),
-    );
+    return Container(
+        padding: EdgeInsets.only(right: 16,left: 20),
+        height: 66,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.location_on,color: Colors.black38,),
+            SizedBox(width: 20,),
+            Expanded(child: Text(item.name,maxLines: 2,style: TextStyle(color: Colors.black87),)),
+          ],
+        ));
   }
-}
-
-class SearchResult {
-  String desc;
-  String log;
-  String lat;
-
-  SearchResult(this.desc, this.log, this.lat);
 }

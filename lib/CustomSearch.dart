@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_webservice/places.dart';
+import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/SearchItem.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,8 @@ const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 const baseUrl = "http://maps.googleapis.com";
 
 class CustomSearch extends SearchDelegate {
-  var provider;
+  PlacesProvider provider;
+
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -38,17 +39,31 @@ class CustomSearch extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     print("Search Pressed");
     return FutureBuilder(
-        future: provider.autoCompleteSearch(query),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<SearchResult>> snapshot) {
+        future: provider.mautoCompleteSearch(query),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<PredictionResult>> snapshot) {
           if (snapshot.hasData) {
-            List<SearchResult> result = snapshot.data;
+            List<PredictionResult> result = snapshot.data;
             return ListView.builder(
                 itemCount: result.length,
                 itemBuilder: (context, index) {
                   var item = result[index];
-                  return SearchItem(
-                    item: item,
+                  return InkWell(
+                    onTap: () {
+                      try {
+                        result.clear();
+                        returnDetails(item, result, context).then((value) {
+                          result = value;
+                          close(context, result);
+                        });
+                      } catch (e) {
+                        print(e);
+                        close(context, null);
+                      }
+                    },
+                    child: SearchItem(
+                      item: item,
+                    ),
                   );
                 });
           } else {
@@ -60,5 +75,16 @@ class CustomSearch extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return Container();
+  }
+
+
+
+
+  Future<List<PredictionResult>> returnDetails(
+      PredictionResult item, var result, BuildContext context) async {
+    var decode = await provider.decodeAndSelectPlace(item.id);
+    item.latLng = decode;
+    result.add(item);
+    return result;
   }
 }

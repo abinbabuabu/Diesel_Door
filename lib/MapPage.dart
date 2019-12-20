@@ -5,23 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petrol_pump/CustomSearch.dart';
+import 'package:petrol_pump/Dataclass.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'MapProvider.dart';
 
-
+const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 
 class MapPage extends StatefulWidget {
-
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-
-
   static const LatLng _center = const LatLng(55.521563, -122.677433);
-
-
+  PredictionResult clickedResult;
 
   @override
   void initState() {
@@ -31,8 +29,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     bool _enabled = false;
-    var provider = Provider
-        .of<MapProvider>(context);
+    var provider = Provider.of<MapProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -43,8 +40,11 @@ class _MapPageState extends State<MapPage> {
               myLocationEnabled: true,
               onMapCreated: provider.onMapCreated,
               initialCameraPosition:
-              CameraPosition(target: _center, zoom: 11.0),
+                  CameraPosition(target: _center, zoom: 11.0),
               markers: provider.markers,
+              onTap: (latLng) {
+                provider.moveToLocation(latLng);
+              },
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -55,18 +55,24 @@ class _MapPageState extends State<MapPage> {
                 width: double.infinity,
                 child: GestureDetector(
                   onTap: () {
-                    showSearch(context: context, delegate: CustomSearch());
+                    var result =
+                        showSearch(context: context, delegate: CustomSearch());
+                    result.then((value) {
+                      for (var i in value) {
+                        clickedResult = i;
+                      }
+                      provider.moveToLocation(clickedResult.latLng);
+                    });
                   },
                   child: AbsorbPointer(
                     child: TextField(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       style: TextStyle(fontSize: 14.0),
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
                           disabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(25.0),
-                              borderSide: BorderSide(color: Colors.grey)),
+                              borderSide: BorderSide(color: Colors.white)),
                           filled: true,
                           enabled: false,
                           fillColor: Colors.white,
@@ -100,14 +106,9 @@ class _MapPageState extends State<MapPage> {
                     padding: const EdgeInsets.all(16.0),
                     child: ButtonTheme(
                       height: 43,
-                      minWidth: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 30,
+                      minWidth: MediaQuery.of(context).size.width - 30,
                       child: RaisedButton(
-                        color: Theme
-                            .of(context)
-                            .accentColor,
+                        color: Theme.of(context).accentColor,
                         onPressed: () {},
                         child: Text(
                           "Submit",
@@ -125,5 +126,17 @@ class _MapPageState extends State<MapPage> {
         ),
       ),
     );
+  }
+
+  void showPlacePicker() async {
+    print("place picker called");
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PlacePicker(
+              googleApiKey,
+              displayLocation: LatLng(55.521563, -122.677433),
+            )));
+
+    // Handle the result in your way
+    if (result != null) print(result.name);
   }
 }

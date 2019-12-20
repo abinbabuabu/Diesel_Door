@@ -8,8 +8,8 @@ class UserDetails {
   String _phone;
   String _email;
 
-  UserDetails(this._name, this._phone, this._gst, this._organisation,
-      this._email);
+  UserDetails(
+      this._name, this._phone, this._gst, this._organisation, this._email);
 
   String get name => _name;
 
@@ -41,5 +41,13 @@ class UserDetails {
           break;
       }
     });
+  }
+
+  UserDetails.fromSnapshot(DataSnapshot snapshot) {
+    _name = snapshot.value["name"];
+    _phone = snapshot.value["phone"];
+    _gst = snapshot.value["gst"];
+    _email = snapshot.value["email"];
+    _organisation = snapshot.value["organisation"];
   }
 }

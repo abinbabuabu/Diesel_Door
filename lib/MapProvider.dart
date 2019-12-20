@@ -66,4 +66,28 @@ class MapProvider with ChangeNotifier {
           target: LatLng(position.latitude, position.longitude),zoom: 16)));
     }
   }
+
+  void moveToLocation(LatLng latLng) {
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: latLng,
+          zoom: 15.0,
+        ),
+      ),
+    );
+    setMarker(latLng);
+  }
+
+  void setMarker(LatLng latLng) {
+      _markers.clear();
+      _markers.add(
+        Marker(
+          markerId: MarkerId("selected-location"),
+          position: latLng,
+        ),
+      );
+      notifyListeners();
+    }
+
 }
