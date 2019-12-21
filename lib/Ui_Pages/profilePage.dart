@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:petrol_pump/Dataclass.dart';
-import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/small_ui_components/RoundedTextField.dart';
 import 'package:provider/provider.dart';
 

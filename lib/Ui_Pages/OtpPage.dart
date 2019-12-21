@@ -1,26 +1,54 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
-import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 
 class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
+  String clock = "00:00";
 
   @override
   _OtpPageState createState() => _OtpPageState();
-
-
 }
 
 class _OtpPageState extends State<OtpPage> {
   String _otp;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 1), (value) {
+      var time = value.tick;
+      if (mounted) {
+        widget.clock = "00:$time";
+        if (time > 58) {
+          value.cancel();
+          widget.clock = "";
+        }
+        if (time < 10) {
+          widget.clock = "00:0$time";
+        }
+        setState(() {
+          widget.clock;
+        });
+      }
+      else{
+        value.cancel();
+      }
+    });
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var provider = Provider.of<LoginProvider>(context);
     var auth = provider.auth;
     var phoneNumber = provider.phoneNumber;
@@ -29,15 +57,11 @@ class _OtpPageState extends State<OtpPage> {
         phoneNumber: phoneNumber,
         timeout: Duration(seconds: 20),
         verificationCompleted: provider.verificationCompleted,
-        verificationFailed:provider.verificationFailed,
+        verificationFailed: provider.verificationFailed,
         codeSent: provider.codeSent,
         codeAutoRetrievalTimeout: provider.codeAutoRetrievalTimeout);
 
-
-  double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
       body: SafeArea(
@@ -56,10 +80,7 @@ class _OtpPageState extends State<OtpPage> {
                     Positioned(
                       bottom: 0,
                       child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         child: Image.asset(
                           'assets/building.png',
                           fit: BoxFit.fill,
@@ -79,14 +100,12 @@ class _OtpPageState extends State<OtpPage> {
                           Expanded(
                             child: Text("OTP Verification",
                                 style: TextStyle(
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColor,
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 20)),
                             flex: 4,
                           ),
                           Expanded(
-                            child: Text("00.00"),
+                            child: Text(widget.clock),
                             flex: 1,
                           )
                         ],
@@ -100,7 +119,7 @@ class _OtpPageState extends State<OtpPage> {
                             actionButtonsEnabled: false,
                             onSubmit: (number) {
                               _otp = number;
-                             provider.SignInWithPhoneNumber(_otp);
+                              provider.SignInWithPhoneNumber(_otp);
                             },
                           ),
                         ),
@@ -111,11 +130,9 @@ class _OtpPageState extends State<OtpPage> {
                           height: 43,
                           minWidth: double.infinity,
                           child: RaisedButton(
-                            color: Theme
-                                .of(context)
-                                .accentColor,
+                            color: Theme.of(context).accentColor,
                             onPressed: () {
-                             provider.SignInWithPhoneNumber(_otp);
+                              provider.SignInWithPhoneNumber(_otp);
                             },
                             child: Text(
                               "Submit",

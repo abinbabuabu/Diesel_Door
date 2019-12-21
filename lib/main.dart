@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';

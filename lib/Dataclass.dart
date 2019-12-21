@@ -1,8 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class PredictionResult{
+class PredictionResult {
   String id;
   String name;
   LatLng latLng;
@@ -14,9 +13,7 @@ class SearchResult {
   String lat;
 
   SearchResult(this.desc, this.log, this.lat);
-
 }
-
 
 class UserDetails {
   String _name;
@@ -66,5 +63,22 @@ class UserDetails {
     _gst = snapshot.value["gst"];
     _email = snapshot.value["email"];
     _organisation = snapshot.value["organisation"];
+  }
+}
+
+class Clock {
+  int minute = 0;
+  int seconds = 0;
+  int count = 0;
+
+  increment() {
+    if (count > 60) {
+      count = 0;
+      minute++;
+      seconds = 0;
+    } else {
+      seconds++;
+      count++;
+    }
   }
 }

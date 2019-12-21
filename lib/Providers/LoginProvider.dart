@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -40,13 +42,15 @@ class LoginProvider with ChangeNotifier {
   String get phoneNumber => _phoneNumber;
 
   Status get status => _status;
+
   FirebaseUser get user => _user;
+
   FirebaseAuth get auth => _auth;
 
   //Setters
 
   set phoneNumber(String newValue) {
-    _phoneNumber = "+91"+newValue;
+    _phoneNumber = "+91" + newValue;
     _status = Status.PhoneNumberEntered;
     notifyListeners();
   }
@@ -73,14 +77,12 @@ class LoginProvider with ChangeNotifier {
     _verificationCompleted = (AuthCredential auth) {
       _auth.signInWithCredential(auth).then((AuthResult value) {
         if (value.user != null) {
-          if(value.additionalUserInfo.isNewUser){
+          if (value.additionalUserInfo.isNewUser) {
             print("New User");
             _status = Status.AuthenticatedNewUser;
-          }
-          else{
+          } else {
             _status = Status.Authenticated;
           }
-
         } else {
           _status = Status.Unauthenticated;
         }
@@ -96,13 +98,13 @@ class LoginProvider with ChangeNotifier {
       print("UnAuthenicated from Auth state");
     } else {
       _user = firebaseUser;
-      if(firebaseUser.metadata.lastSignInTime == firebaseUser.metadata.creationTime){
+      if (firebaseUser.metadata.lastSignInTime ==
+          firebaseUser.metadata.creationTime) {
         print(firebaseUser.metadata.lastSignInTime);
         print(firebaseUser.metadata.creationTime);
         print("new User From Auth State");
         _status = Status.AuthenticatedNewUser;
-      }
-      else {
+      } else {
         print("Authenticated from Firebase");
         _status = Status.Authenticated;
       }
@@ -127,7 +129,8 @@ class LoginProvider with ChangeNotifier {
     });
   }
 
-   Future<dynamic> logout() async {
-     return _auth.signOut();
-   }
+  Future<dynamic> logout() async {
+    return _auth.signOut();
+  }
+
 }

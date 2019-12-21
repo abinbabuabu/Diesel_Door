@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
-import 'package:petrol_pump/Providers/FirebaseProvider.dart';
-import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
-import 'package:petrol_pump/Ui_Pages/MapPage.dart';
-import 'package:petrol_pump/small_ui_components/MapProvider.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';

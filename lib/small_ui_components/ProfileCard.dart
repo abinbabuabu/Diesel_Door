@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:petrol_pump/small_ui_components/CoupledTextProfile.dart';
 
 class ProfileCard extends StatelessWidget {
-  String name;
-  String gst;
-  String org;
-  String email;
-  String phone;
+  final String name;
+  final String gst;
+  final String org;
+  final String email;
+  final String phone;
 
   ProfileCard(
       {@required this.name,
