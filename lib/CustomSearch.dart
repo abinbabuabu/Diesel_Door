@@ -67,7 +67,8 @@ class CustomSearch extends SearchDelegate {
                   );
                 });
           } else {
-            return Container();
+            return Container(child: Text("No result found"
+                ""),);
           }
         });
   }

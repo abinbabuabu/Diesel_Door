@@ -4,6 +4,7 @@ import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
+import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,10 +16,10 @@ class HomePage extends StatelessWidget {
     switch (login.status) {
       case Status.Uninitialized:
         print("Uninitalised");
-        _child = LoginPage();
+        _child = Container();
         break;
       case Status.Unauthenticated:
-        print("UnAuthenticated");
+        print("UnAuthenticated 1");
         _child = LoginPage();
         break;
       case Status.Authenticated:

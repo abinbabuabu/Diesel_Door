@@ -16,35 +16,38 @@ class OtpPage extends StatefulWidget {
 
 class _OtpPageState extends State<OtpPage> {
   String _otp;
+  Timer _time;
+
+  void timer(Timer value) {
+    var time = value.tick;
+    if (mounted) {
+      widget.clock = "00:$time";
+      if (time > 58) {
+        value.cancel();
+        widget.clock = "";
+      }
+      if (time < 10) {
+        widget.clock = "00:0$time";
+      }
+      setState(() {
+        widget.clock;
+      });
+    } else {
+      value.cancel();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    if(mounted) {
-      Timer.periodic(Duration(milliseconds: 1000), (value) {
-        var time = value.tick;
-        if (mounted) {
-          widget.clock = "00:$time";
-          if (time > 58) {
-            value.cancel();
-            widget.clock = "";
-          }
-          if (time < 10) {
-            widget.clock = "00:0$time";
-          }
-          setState(() {
-            widget.clock;
-          });
-        }
-        else {
-          value.cancel();
-        }
-      });
+    if (mounted) {
+      _time = Timer.periodic(Duration(milliseconds: 1000), timer);
     }
   }
 
   @override
   void dispose() {
+    _time.cancel();
     super.dispose();
   }
 
@@ -61,7 +64,6 @@ class _OtpPageState extends State<OtpPage> {
         verificationFailed: provider.verificationFailed,
         codeSent: provider.codeSent,
         codeAutoRetrievalTimeout: provider.codeAutoRetrievalTimeout);
-
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
