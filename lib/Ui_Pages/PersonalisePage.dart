@@ -4,8 +4,8 @@ import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
 import 'package:petrol_pump/small_ui_components/IconedText.dart';
 import 'package:petrol_pump/small_ui_components/ProfileCard.dart';
+import 'package:petrol_pump/small_ui_components/loadingCardProfile.dart';
 import 'package:provider/provider.dart';
-
 
 class PersonalisePage extends StatefulWidget {
   @override
@@ -46,8 +46,9 @@ class _PersonalisePageState extends State<PersonalisePage> {
                       org: details.organisation,
                     );
                   } else {
-                    return ProfileCard(
-                        name: "", gst: "", org: "", email: "", phone: "");
+//                    return ProfileCard(
+////                        name: "", gst: "", org: "", email: "", phone: "");
+                    return LoadingCard();
                   }
                 },
               ),

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
@@ -21,25 +20,27 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 1), (value) {
-      var time = value.tick;
-      if (mounted) {
-        widget.clock = "00:$time";
-        if (time > 58) {
+    if(mounted) {
+      Timer.periodic(Duration(milliseconds: 1000), (value) {
+        var time = value.tick;
+        if (mounted) {
+          widget.clock = "00:$time";
+          if (time > 58) {
+            value.cancel();
+            widget.clock = "";
+          }
+          if (time < 10) {
+            widget.clock = "00:0$time";
+          }
+          setState(() {
+            widget.clock;
+          });
+        }
+        else {
           value.cancel();
-          widget.clock = "";
         }
-        if (time < 10) {
-          widget.clock = "00:0$time";
-        }
-        setState(() {
-          widget.clock;
-        });
-      }
-      else{
-        value.cancel();
-      }
-    });
+      });
+    }
   }
 
   @override
