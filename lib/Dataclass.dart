@@ -1,11 +1,17 @@
+import 'dart:collection';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// Isn't it the same as Search Result ?
 
 class PredictionResult {
   String id;
   String name;
   LatLng latLng;
 }
+
+// The search  retrieved from the google Maps
 
 class SearchResult {
   String desc;
@@ -14,6 +20,8 @@ class SearchResult {
 
   SearchResult(this.desc, this.log, this.lat);
 }
+
+// User Details Data class used for uploading and retrieve the data from the firebase
 
 class UserDetails {
   String _name;
@@ -34,6 +42,8 @@ class UserDetails {
   String get phone => _phone;
 
   String get email => _email;
+
+  // This is not Used remove if not used !
 
   UserDetails.fromDb(Map<dynamic, dynamic> data) {
     data.forEach((key, value) {
@@ -57,6 +67,8 @@ class UserDetails {
     });
   }
 
+  // This is Used to serialize the data retrieved from the Firebase Realtime database
+
   UserDetails.fromSnapshot(DataSnapshot snapshot) {
     _name = snapshot.value["name"];
     _phone = snapshot.value["phone"];
@@ -65,6 +77,8 @@ class UserDetails {
     _organisation = snapshot.value["organisation"];
   }
 }
+
+// Not used remove !
 
 class Clock {
   int minute = 0;
@@ -81,4 +95,42 @@ class Clock {
       count++;
     }
   }
+}
+
+class LocationResult {
+  String name;
+  String locality;
+  String latlng;
+  String formattedAddress;
+  String placeId;
+}
+
+class OrderData {
+  String orderId;
+  String orderDate;
+  String status = "Pending";
+  String quantity;
+  String name = "";
+  String locality = "";
+  String latLng = "";
+  String formattedAddress;
+  String placeId = "";
+
+  OrderData.fromSnapshot(DataSnapshot snapshot) {
+    orderId = snapshot.value["orderId"];
+    orderDate = snapshot.value["orderDate"];
+    status = snapshot.value["status"];
+    quantity = snapshot.value["quantity"];
+    formattedAddress = snapshot.value["formattedAddress"];
+  }
+  OrderData();
+
+  OrderData.fromDynamicMap(Map<dynamic,dynamic> map){
+   orderId = map["orderId"];
+   orderDate = map["orderDate"];
+   status =  map["status"];
+   quantity = map["quantity"];
+   formattedAddress =  map["formattedAddress"];
+  }
+
 }

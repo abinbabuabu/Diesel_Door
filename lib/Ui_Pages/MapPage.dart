@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petrol_pump/CustomSearch.dart';
 import 'package:petrol_pump/Dataclass.dart';
+import 'package:petrol_pump/Ui_Pages/OrderPage.dart';
+import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../small_ui_components/MapProvider.dart';
+import '../Providers/MapProvider.dart';
 
 const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 
@@ -69,7 +71,7 @@ class _MapPageState extends State<MapPage> {
                           prefixIcon: Icon(Icons.search),
                           disabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(25.0),
-                              borderSide: BorderSide(color: Colors.white)),
+                              borderSide: BorderSide(color: Colors.white30)),
                           filled: true,
                           enabled: false,
                           fillColor: Colors.white,
@@ -106,7 +108,10 @@ class _MapPageState extends State<MapPage> {
                       minWidth: MediaQuery.of(context).size.width - 30,
                       child: RaisedButton(
                         color: Theme.of(context).accentColor,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(SlideRightRoute(page: OrderPage()));
+                          provider.reverseGeocodeLatLng(provider.lastLocation);
+                        },
                         child: Text(
                           "Submit",
                           style: TextStyle(color: Colors.white),
@@ -125,15 +130,5 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void showPlacePicker() async {
-    print("place picker called");
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PlacePicker(
-              googleApiKey,
-              displayLocation: LatLng(55.521563, -122.677433),
-            )));
-
-    // Handle the result in your way
-    if (result != null) print(result.name);
-  }
+ //TODO("Remove the place Picker Dependency and Check for other Dependecy removal")
 }

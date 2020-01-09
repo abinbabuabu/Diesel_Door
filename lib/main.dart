@@ -4,22 +4,28 @@ import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
+import 'package:petrol_pump/Ui_Pages/OrderPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
 import 'Providers/FirebaseProvider.dart';
 import 'Providers/LoginProvider.dart';
-import 'small_ui_components/MapProvider.dart';
+import 'Providers/MapProvider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black87
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark
+
     ));
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<LoginProvider>(

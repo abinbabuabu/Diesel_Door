@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:provider/provider.dart';
 
 import '../Providers/LoginProvider.dart';
@@ -27,7 +26,7 @@ class IconedText extends StatelessWidget {
                   print("clicked");
                   if(islogout){
                     Provider.of<LoginProvider>(context).logout().then((value){
-                      Navigator.popAndPushNamed(context, HomePage.routeName);
+                     // Navigator.pushReplacement(context, SlideRightRoute(page: HomePage()));
                     });
                   }
                 },

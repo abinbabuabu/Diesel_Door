@@ -25,7 +25,8 @@ class CoupledTextOrder extends StatelessWidget {
           Align(
             child: Text(
               value,
-              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
               style: TextStyle(fontSize: 13, color: color),
             ),
             alignment: Alignment.centerLeft,

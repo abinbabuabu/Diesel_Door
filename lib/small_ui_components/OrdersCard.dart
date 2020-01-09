@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:petrol_pump/small_ui_components/CoupledTextOrder.dart';
 
@@ -55,7 +56,7 @@ class OrdersCard extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Container(
-                      width: 30,
+                      width: 20,
                     ),
                     Expanded(
                       child: Container(
@@ -63,15 +64,21 @@ class OrdersCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                CoupledTextOrder(
-                                    label: labelOrderId, value: orderId),
-                                Container(
-                                  width: 50,
+                                Expanded(
+                                  child: CoupledTextOrder(
+                                      label: labelOrderId,
+                                      value: orderId),
+                                  flex: 1,
                                 ),
-                                CoupledTextOrder(
-                                  label: labelOrderDate,
-                                  value: orderDate,
+
+                                Expanded(
+                                  child: CoupledTextOrder(
+                                    label: labelOrderDate,
+                                    value: orderDate,
+                                  ),
+                                  flex: 1,
                                 )
                               ],
                             ),
@@ -85,7 +92,7 @@ class OrdersCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      flex: 2,
+                      flex: 3,
                     ),
                     Expanded(
                       child: Container(

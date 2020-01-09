@@ -7,14 +7,19 @@ import 'package:http/http.dart' as http;
 import 'package:petrol_pump/Dataclass.dart';
 import 'package:uuid/uuid.dart';
 
+// Remove this api key from here and move to some where hidden !
 const googleApiKey = "AIzaSyDmFsYarIa5yJppIMjJ0zph2e3X8bWI0tA";
 
 class PlacesProvider with ChangeNotifier {
   GoogleMapsPlaces _places;
   String sessionToken = Uuid().v4();
 
+
+
   PlacesProvider.instance()
       : _places = new GoogleMapsPlaces(apiKey: googleApiKey);
+
+  // The Search result out the google map search
 
   Future<List<SearchResult>> autoCompleteSearch(String text) async {
     List<SearchResult> result = List();
@@ -34,6 +39,8 @@ class PlacesProvider with ChangeNotifier {
     return result;
   }
 
+  // This is  used to retrieve data from the place id
+
   Future<PlacesDetailsResponse> findPlaceID(String placeid) async {
     List<String> fieldList = ["geometry"];
     var response;
@@ -48,6 +55,8 @@ class PlacesProvider with ChangeNotifier {
     });
     return response;
   }
+
+  // The same as the autocomplete result find the difference
 
   Future<List<PredictionResult>> mautoCompleteSearch(String place) async {
     List<PredictionResult> suggestions = [];
@@ -82,6 +91,8 @@ class PlacesProvider with ChangeNotifier {
     return suggestions;
   }
 
+  // Decode the place details
+
   Future<LatLng> decodeAndSelectPlace(String placeId) async {
     LatLng result;
     String endpoint =
@@ -92,7 +103,7 @@ class PlacesProvider with ChangeNotifier {
 
     if (response.statusCode == 200) {
       Map<String, dynamic> location =
-      jsonDecode(response.body)['result']['geometry']['location'];
+          jsonDecode(response.body)['result']['geometry']['location'];
 
       result = LatLng(location['lat'], location['lng']);
       print("${result.longitude},,,, ${result.latitude}");
@@ -100,4 +111,6 @@ class PlacesProvider with ChangeNotifier {
       return result;
     }
   }
+
+
 }
