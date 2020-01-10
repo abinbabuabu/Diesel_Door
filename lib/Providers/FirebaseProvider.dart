@@ -105,7 +105,7 @@ class FirebaseProvider with ChangeNotifier {
         var _orderData = OrderData.fromDynamicMap(value);
         OrdersList.add(_orderData);
       });
-      return OrdersList;
+      return OrdersList.reversed.toList();
     } else {
       return null;
     }

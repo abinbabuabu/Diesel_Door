@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
@@ -12,6 +15,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String phone;
+  StreamSubscription _subscription;
+  bool _connectivity = false;
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _visibility = true;
   FocusNode _focusNode = FocusNode();
@@ -20,19 +27,36 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _focusNode.addListener(toggleContainerVisibility);
+
+    Connectivity().checkConnectivity().then((value) {
+      if (value == ConnectivityResult.mobile ||
+          value == ConnectivityResult.wifi) _connectivity = true;
+    });
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) _connectivity = true;
+    });
+
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   void toggleContainerVisibility() {
     _visibility = false;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -133,8 +157,14 @@ class _LoginPageState extends State<LoginPage> {
                         child: RaisedButton(
                           color: Theme.of(context).accentColor,
                           onPressed: () {
-                            if(phone.length ==  10) {
-                              Provider.of<LoginProvider>(context).phoneNumber = phone;
+                            if (phone.length == 10) {
+                              if (_connectivity) {
+                                Provider.of<LoginProvider>(context)
+                                    .phoneNumber = phone;
+                              } else {
+                                _displaySnackBar(context);
+                                print("No internet");
+                              }
                             }
                           },
                           child: Text(
@@ -155,9 +185,18 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  void _displaySnackBar(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    final snackbar = SnackBar(
+      content: Text("No Internet Connection"),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
 }
 
 class LoginArguments {
   final String phoneNumber;
+
   LoginArguments(this.phoneNumber);
 }

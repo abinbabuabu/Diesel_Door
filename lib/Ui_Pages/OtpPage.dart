@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
@@ -10,6 +11,7 @@ class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
   String clock = "00:00";
 
+
   @override
   _OtpPageState createState() => _OtpPageState();
 }
@@ -17,6 +19,9 @@ class OtpPage extends StatefulWidget {
 class _OtpPageState extends State<OtpPage> {
   String _otp;
   Timer _time;
+  bool _connectivity = false;
+  StreamSubscription _subscription;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void timer(Timer value) {
     var time = value.tick;
@@ -43,11 +48,27 @@ class _OtpPageState extends State<OtpPage> {
     if (mounted) {
       _time = Timer.periodic(Duration(milliseconds: 1000), timer);
     }
+
+    Connectivity().checkConnectivity().then((value) {
+      if (value == ConnectivityResult.mobile ||
+          value == ConnectivityResult.wifi) _connectivity = true;
+    });
+
+
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) {
+        _connectivity = true;
+      }
+    });
   }
 
   @override
   void dispose() {
     _time.cancel();
+    _subscription.cancel();
     super.dispose();
   }
 
@@ -67,6 +88,7 @@ class _OtpPageState extends State<OtpPage> {
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -135,7 +157,12 @@ class _OtpPageState extends State<OtpPage> {
                           child: RaisedButton(
                             color: Theme.of(context).accentColor,
                             onPressed: () {
-                              provider.SignInWithPhoneNumber(_otp);
+                              if (_connectivity) {
+                                _time.cancel();
+                                provider.SignInWithPhoneNumber(_otp);
+                              } else {
+                                _displaySnackBar(context);
+                              }
                             },
                             child: Text(
                               "Submit",
@@ -155,5 +182,13 @@ class _OtpPageState extends State<OtpPage> {
         ),
       ),
     );
+  }
+
+  void _displaySnackBar(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    final snackbar = SnackBar(
+      content: Text("No Internet Connection"),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 }

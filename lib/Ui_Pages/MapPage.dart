@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,10 +23,34 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   static const LatLng _center = const LatLng(55.521563, -122.677433);
   PredictionResult clickedResult;
+  StreamSubscription _subscription;
+  bool _connectivity = false;
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+
+    Connectivity().checkConnectivity().then((value) {
+      if (value == ConnectivityResult.mobile ||
+          value == ConnectivityResult.wifi) _connectivity = true;
+    });
+
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) {
+        _connectivity = true;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -31,6 +58,7 @@ class _MapPageState extends State<MapPage> {
     var provider = Provider.of<MapProvider>(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -109,8 +137,14 @@ class _MapPageState extends State<MapPage> {
                       child: RaisedButton(
                         color: Theme.of(context).accentColor,
                         onPressed: () {
-                          Navigator.of(context).push(SlideRightRoute(page: OrderPage()));
-                          provider.reverseGeocodeLatLng(provider.lastLocation);
+                          if (_connectivity) {
+                            Navigator.of(context)
+                                .push(SlideRightRoute(page: OrderPage()));
+                            provider
+                                .reverseGeocodeLatLng(provider.lastLocation);
+                          } else {
+                            _displaySnackBar(context);
+                          }
                         },
                         child: Text(
                           "Submit",
@@ -130,5 +164,13 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
- //TODO("Remove the place Picker Dependency and Check for other Dependecy removal")
+  void _displaySnackBar(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    final snackbar = SnackBar(
+      content: Text("No Internet Connection"),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+//TODO("Remove the place Picker Dependency and Check for other Dependecy removal")
 }
