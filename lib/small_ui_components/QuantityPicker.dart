@@ -99,14 +99,14 @@ class _CounterState extends State<Counter> {
           children: <Widget>[
             new Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
                   child: Center(
                     child: InkWell(
                       child: Icon(
                         Icons.arrow_drop_up,
-                        size: 28,
+                        size: 30,
                       ),
                       onTap: _decrementCounter,
                       borderRadius: BorderRadius.circular(16.0),
@@ -118,12 +118,12 @@ class _CounterState extends State<Counter> {
                   child: InkWell(
                     child: Icon(
                       Icons.arrow_drop_down,
-                      size: 28,
+                      size: 30,
                     ),
                     onTap: _incrementCounter,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  flex: 1,
+                  flex: 2,
                 )
               ],
             ),

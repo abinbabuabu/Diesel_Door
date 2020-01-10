@@ -73,21 +73,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       RoundedTextField(
                         Icons.person,
                         "Full Name",
+                        "",
                         controller: widget._nameController,
                       ),
                       RoundedTextField(
                         Icons.mail,
                         "Email",
+                        "",
                         controller: widget._emailController,
                       ),
                       RoundedTextField(
                         Icons.domain,
                         "Organisation",
+                        "",
                         controller: widget._companyController,
                       ),
                       RoundedTextField(
                         Icons.info,
                         "Gst No",
+                        "",
                         controller: widget._gstController,
                       ),
                       Container(
@@ -105,10 +109,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             String email = widget._emailController.text;
                             var data = _createDataUser(name, org, gst, email);
                             Provider.of<FirebaseProvider>(context)
-                                .fireInsertUser(data).then((value){
-                                  Navigator.popAndPushNamed(context, DetailsPage.routeName);
+                                .fireInsertUser(data)
+                                .then((value) {
+                              Navigator.popAndPushNamed(
+                                  context, DetailsPage.routeName);
                             });
-
                           },
                           child: Text(
                             "Submit",

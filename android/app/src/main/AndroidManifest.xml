@@ -13,7 +13,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
-        android:label="petrol_pump"
+        android:label="Diesel Door Delivery"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"

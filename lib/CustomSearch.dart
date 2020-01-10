@@ -11,7 +11,6 @@ const baseUrl = "http://maps.googleapis.com";
 class CustomSearch extends SearchDelegate {
   PlacesProvider provider;
 
-
   @override
   List<Widget> buildActions(BuildContext context) {
     provider = Provider.of<PlacesProvider>(context);
@@ -63,11 +62,16 @@ class CustomSearch extends SearchDelegate {
                     },
                     child: SearchItem(
                       item: item,
+                      iconVisibility: item.iconVisibility,
                     ),
                   );
                 });
           } else {
-            return Container(child: Text("No result found"),);
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: RefreshProgressIndicator(),
+              alignment: Alignment.topCenter,
+            );
           }
         });
   }
@@ -76,9 +80,6 @@ class CustomSearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     return Container();
   }
-
-
-
 
   Future<List<PredictionResult>> returnDetails(
       PredictionResult item, var result, BuildContext context) async {

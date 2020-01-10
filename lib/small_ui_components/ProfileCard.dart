@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Ui_Pages/EditProfilePage.dart';
 import 'package:petrol_pump/small_ui_components/CoupledTextProfile.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -79,9 +80,20 @@ class ProfileCard extends StatelessWidget {
             Expanded(
               child: Container(
                 child: Container(
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {},
+                  child: Hero(
+                    tag: "editprofile",
+                    child: Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
+                        },
+                      ),
+                    ),
                   ),
                   alignment: Alignment.topLeft,
                 ),

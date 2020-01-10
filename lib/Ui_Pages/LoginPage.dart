@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
       if (result == ConnectivityResult.mobile ||
           result == ConnectivityResult.wifi) _connectivity = true;
     });
-
   }
 
   @override
@@ -93,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             Text(
-                              "Petrol Pump",
+                              "Diesel Door Delivery",
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Theme.of(context).primaryColor),
@@ -140,6 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(left: 10),
+                              prefixText: "+91 ",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(color: Colors.red),

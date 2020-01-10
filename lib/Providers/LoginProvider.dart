@@ -19,6 +19,14 @@ class LoginProvider with ChangeNotifier {
   String _phoneNumber;
   Status _status = Status.Uninitialized;
   static String _verificationId;
+  String _error;
+
+  String get error => _error;
+
+  set error(String value) {
+    _error = value;
+    notifyListeners();
+  }
 
   PhoneCodeSent _codeSent;
   PhoneCodeAutoRetrievalTimeout _codeAutoRetrievalTimeout;
@@ -87,6 +95,7 @@ class LoginProvider with ChangeNotifier {
           _status = Status.Unauthenticated;
         }
       }).catchError((onError) {
+        error = onError.toString();
         _status = Status.Unauthenticated;
       });
     };
@@ -113,24 +122,26 @@ class LoginProvider with ChangeNotifier {
   }
 
   void SignInWithPhoneNumber(String smsCode) async {
-    var _authCredential = PhoneAuthProvider.getCredential(
-        verificationId: _verificationId, smsCode: smsCode);
+    try {
+      var _authCredential = PhoneAuthProvider.getCredential(
+          verificationId: _verificationId, smsCode: smsCode);
 
-    await _auth
-        .signInWithCredential(_authCredential)
-        .catchError((onError) {})
-        .then((onValue) {
-      if (onValue != null) {
-        print(onValue.user.phoneNumber);
-        print("Logged IN ");
-        _status = Status.Authenticated;
-        notifyListeners();
-      }
-    });
+      await _auth.signInWithCredential(_authCredential).catchError((onError) {
+        error = "Invalid Code";
+      }).then((onValue) {
+        if (onValue != null) {
+          print(onValue.user.phoneNumber);
+          print("Logged IN ");
+          _status = Status.Authenticated;
+          notifyListeners();
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<dynamic> logout() async {
     return _auth.signOut();
   }
-
 }

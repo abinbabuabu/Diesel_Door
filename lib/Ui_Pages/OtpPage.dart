@@ -87,6 +87,12 @@ class _OtpPageState extends State<OtpPage> {
         codeAutoRetrievalTimeout: provider.codeAutoRetrievalTimeout);
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
+
+    if(provider.error != null){
+      print("called");
+      _displaySnackBar(context, provider.error);
+      provider.error = null;
+    }
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -161,7 +167,7 @@ class _OtpPageState extends State<OtpPage> {
                                 _time.cancel();
                                 provider.SignInWithPhoneNumber(_otp);
                               } else {
-                                _displaySnackBar(context);
+                                _displaySnackBar(context,"No Internet Connection");
                               }
                             },
                             child: Text(
@@ -184,10 +190,10 @@ class _OtpPageState extends State<OtpPage> {
     );
   }
 
-  void _displaySnackBar(BuildContext context) {
+  void _displaySnackBar(BuildContext context,String text) {
     FocusScope.of(context).unfocus();
     final snackbar = SnackBar(
-      content: Text("No Internet Connection"),
+      content: Text(text),
     );
     _scaffoldKey.currentState.showSnackBar(snackbar);
   }

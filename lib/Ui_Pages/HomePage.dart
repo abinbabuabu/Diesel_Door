@@ -4,7 +4,6 @@ import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
-import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -9,6 +7,7 @@ class PredictionResult {
   String id;
   String name;
   LatLng latLng;
+  bool iconVisibility = true;
 }
 
 // The search  retrieved from the google Maps
@@ -115,6 +114,7 @@ class OrderData {
   String latLng = "";
   String formattedAddress;
   String placeId = "";
+  String userID ="";
 
   OrderData.fromSnapshot(DataSnapshot snapshot) {
     orderId = snapshot.value["orderId"];

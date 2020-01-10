@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedTextField extends StatelessWidget {
-  RoundedTextField(this._iconValue,this._hintText,{@required this.controller}):super();
+  RoundedTextField(this._iconValue,this._hintText,this.text,{@required this.controller}):super();
 
   final IconData _iconValue;
   final String _hintText;
+  String text;
   final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
+    print(text);
     return Container(
       margin: EdgeInsets.only(top:8),
       padding: EdgeInsets.all(4.0),

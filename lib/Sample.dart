@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
@@ -14,47 +11,39 @@ class Sample extends StatefulWidget {
 }
 
 class _SampleState extends State<Sample> {
+  FirebaseProvider provider;
+
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<FirebaseProvider>(context);
-    return FutureBuilder(
-        future: provider.fireRetrieveOrders(),
-        builder: (context, snap) {
-          if (snap.hasData) {
-            return ListView.builder(
-                itemCount: snap.data.length,
-                itemBuilder: (context, index) {
-                  OrderData v = snap.data[index];
-                  return OrdersCard(
-                    orderDate: v.orderDate,
-                    orderId: v.orderId,
-                    location: v.formattedAddress,
-                    status: v.status,
-                    quantity: v.quantity,
-                  );
-                });
-          } else {
-            return LinearProgressIndicator();
-          }
-        });
+    provider = Provider.of<FirebaseProvider>(context);
+    if (!provider.orderIsEmpty) {
+      return FutureBuilder(
+          future: provider.fireRetrieveOrders(),
+          builder: (context, snap) {
+            if (snap.hasData) {
+              return ListView.builder(
+                  itemCount: snap.data.length,
+                  itemBuilder: (context, index) {
+                    OrderData v = snap.data[index];
+                    return OrdersCard(
+                      orderDate: v.orderDate,
+                      orderId: v.orderId,
+                      location: v.formattedAddress,
+                      status: v.status,
+                      quantity: v.quantity,
+                    );
+                  });
+            } else {
+              return LinearProgressIndicator();
+            }
+          });
+    } else {
+      return FutureBuilder(future:provider.fireRetrieveOrders(),builder:(context,snap){
+        return Container(alignment:Alignment.center,child: Column(crossAxisAlignment:CrossAxisAlignment.center,children: <Widget>[
+          Container(child: Image.asset("assets/NoOrders.png",),height: 200,width: 200,),
+          Text("No Orders Found")
+        ],),);});
+    }
   }
 
-  Widget _choose(AsyncSnapshot snap) {
-    bool f = true;
-    Timer(Duration(seconds: 1), () {
-      if (!snap.hasData) {
-        setState(() {
-          f=false;
-        });
-
-      }
-    });
-    if (f) {
-      return Center(
-          child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.black87),
-      ));
-    } else
-      return Text("No data");
-  }
 }

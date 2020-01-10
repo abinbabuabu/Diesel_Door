@@ -64,7 +64,7 @@ class PlacesProvider with ChangeNotifier {
     var endpoint =
         "https://maps.googleapis.com/maps/api/place/autocomplete/json?" +
             "key=$googleApiKey&" +
-            "input={$place}&sessiontoken=${this.sessionToken}";
+            "input={$place}&sessiontoken=${this.sessionToken}"+"&components=country:IN";
     try {
       var response = await http.get(endpoint);
       if (response.statusCode == 200) {
@@ -85,7 +85,8 @@ class PlacesProvider with ChangeNotifier {
       }
     } catch (e) {
       PredictionResult res = new PredictionResult();
-      res.name = e.toString();
+      res.name = "No Internet Connection";
+      res.iconVisibility = false;
       suggestions.add(res);
     }
     return suggestions;
@@ -94,21 +95,25 @@ class PlacesProvider with ChangeNotifier {
   // Decode the place details
 
   Future<LatLng> decodeAndSelectPlace(String placeId) async {
-    LatLng result;
-    String endpoint =
-        "https://maps.googleapis.com/maps/api/place/details/json?key=$googleApiKey" +
-            "&placeid=$placeId";
+    try {
+      LatLng result;
+      String endpoint =
+          "https://maps.googleapis.com/maps/api/place/details/json?key=$googleApiKey" +
+              "&placeid=$placeId";
 
-    var response = await http.get(endpoint);
+      var response = await http.get(endpoint);
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> location =
-          jsonDecode(response.body)['result']['geometry']['location'];
+      if (response.statusCode == 200) {
+        Map<String, dynamic> location =
+        jsonDecode(response.body)['result']['geometry']['location'];
 
-      result = LatLng(location['lat'], location['lng']);
-      print("${result.longitude},,,, ${result.latitude}");
+        result = LatLng(location['lat'], location['lng']);
 
-      return result;
+        return result;
+      }
+    }
+    catch(e){
+      print(e);
     }
   }
 

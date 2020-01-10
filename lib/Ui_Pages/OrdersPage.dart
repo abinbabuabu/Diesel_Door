@@ -7,6 +7,7 @@ class OrdersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,

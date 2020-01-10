@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
-import 'package:petrol_pump/Ui_Pages/OrderPage.dart';
 
 class FirebaseProvider with ChangeNotifier {
   DatabaseReference _db;
@@ -10,6 +9,14 @@ class FirebaseProvider with ChangeNotifier {
   FirebaseUser _user;
   bool _isUserAdded = false;
   UserDetails _userData = UserDetails("abin", "smaple", "sample", "India", "");
+  bool _orderIsEmpty = false;
+
+  bool get orderIsEmpty => _orderIsEmpty;
+
+  set orderIsEmpty(bool value) {
+    _orderIsEmpty = value;
+    notifyListeners();
+  }
 
   set userData(UserDetails newValue) {
     _userData = newValue;
@@ -53,8 +60,8 @@ class FirebaseProvider with ChangeNotifier {
       var _userDetails =
           _db.child("Users").child(user.uid).child("UserDetails");
       var result = await _userDetails.once();
-      var _userdata = UserDetails.fromSnapshot(result);
-      return _userdata;
+      userData = UserDetails.fromSnapshot(result);
+      return userData;
     } else {
       return null;
     }
@@ -88,7 +95,8 @@ class FirebaseProvider with ChangeNotifier {
       "locality": orderData.locality,
       "latLng": orderData.latLng,
       "formattedAddress": orderData.formattedAddress,
-      "placeId": orderData.placeId
+      "placeId": orderData.placeId,
+      "userId":_user.uid
     });
   }
 
@@ -97,9 +105,19 @@ class FirebaseProvider with ChangeNotifier {
     _user = await FirebaseAuth.instance.currentUser();
     if (_user != null) {
       var orders = _db.child("Users").child(_user.uid).child("Orders").orderByChild("orderId");
-      var result = await orders.once();
+      var result = await orders.once().catchError((error){
+        print(error);
+      });
 
       Map<dynamic,dynamic> _resultMap = result.value;
+
+      if(result.value == null){
+       orderIsEmpty = true;
+      }
+      else{
+        orderIsEmpty = false;
+      }
+
 
       _resultMap.forEach((key,value){
         var _orderData = OrderData.fromDynamicMap(value);
