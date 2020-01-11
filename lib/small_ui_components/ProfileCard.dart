@@ -80,14 +80,20 @@ class ProfileCard extends StatelessWidget {
             Expanded(
               child: Container(
                 child: Container(
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditProfile()));
-                    },
+                  child: Hero(
+                    tag: "formProfile",
+                    child: Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
+                        },
+                      ),
+                    ),
                   ),
                   alignment: Alignment.topLeft,
                 ),

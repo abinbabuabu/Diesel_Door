@@ -92,14 +92,18 @@ class MapProvider with ChangeNotifier {
 
   void moveToLocation(LatLng latLng) {
     lastLocation = latLng;
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: latLng,
-          zoom: 15.0,
+    try {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: latLng,
+            zoom: 15.0,
+          ),
         ),
-      ),
-    );
+      );
+    }catch(e){
+      print(e);
+    }
     setMarker(latLng);
   }
 

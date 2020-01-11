@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
             fontFamily: "Montserrat",
             primaryColor: Color(0xFF265FFB),
             accentColor: Color(0xFFFAC702)),
-        home: EditProfile(),
+        home: HomePage(),
         routes: {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),
