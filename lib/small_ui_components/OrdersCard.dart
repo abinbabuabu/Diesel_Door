@@ -39,7 +39,7 @@ class OrdersCard extends StatelessWidget {
       color = Colors.red;
 
     return Card(
-        margin: EdgeInsets.only(left: 8.0,right: 8.0,top:16.0),
+        margin: EdgeInsets.only(left: 8.0,right: 8.0,top:8.0,bottom:8.0),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(12.0),

@@ -34,12 +34,13 @@ class RoundedTextField extends StatelessWidget {
 
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField(this._iconValue,this._hintText,this.text,this.listener):super();
+  CustomTextField(this._required,this._iconValue,this._hintText,this.text,this.listener):super();
 
   final IconData _iconValue;
   final String _hintText;
   String text;
   final TextChangeListener listener;
+  final bool _required;
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +52,19 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         initialValue: text,
         onChanged: (value){
-          if(value.isNotEmpty)
-          listener(value);
+          if(_required) {
+            if (value.isNotEmpty)
+              listener(value);
+          }
+          else{
+            listener(value);
+          }
         },
         validator: (value){
-          if(value.isEmpty){
-            return "Required Field";
+          if(_required) {
+            if (value.isEmpty) {
+              return "Required Field";
+            }
           }
           return null;
         },

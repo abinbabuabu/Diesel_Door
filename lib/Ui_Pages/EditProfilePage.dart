@@ -65,17 +65,17 @@ class MyCustomFormState extends State<MyCustomForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          CustomTextField(Icons.person, "Fullname", _userDetails.name, (text) {
+          CustomTextField(true,Icons.person, "Fullname", _userDetails.name, (text) {
             name = text;
           }),
-          CustomTextField(Icons.email, "Email", _userDetails.email, (text) {
+          CustomTextField(true,Icons.email, "Email", _userDetails.email, (text) {
             email = text;
           }),
-          CustomTextField(
+          CustomTextField(true,
               Icons.domain, "Organisation", _userDetails.organisation, (text) {
             org = text;
           }),
-          CustomTextField(Icons.info, "GST", _userDetails.gst, (text) {
+          CustomTextField(false,Icons.info, "GST", _userDetails.gst, (text) {
             gst = text;
           }),
           Padding(
