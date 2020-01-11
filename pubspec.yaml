@@ -76,6 +76,9 @@ flutter:
     - family: MontserratLight
       fonts:
         - asset: fonts/Montserrat-Medium.ttf
+    - family:  MyFlutterApp
+      fonts:
+        - asset: fonts/MyFlutterApp.ttf
 
 
   #         style: italic

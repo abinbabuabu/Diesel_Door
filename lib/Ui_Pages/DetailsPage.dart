@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Icons/my_flutter_app_icons.dart';
 import 'package:petrol_pump/Ui_Pages/MapPage.dart';
 import 'package:petrol_pump/Ui_Pages/OrdersPage.dart';
 import 'package:petrol_pump/Ui_Pages/PersonalisePage.dart';
+
 
 class DetailsPage extends StatefulWidget {
   static const routeName = "DetailsPage";
@@ -34,7 +36,7 @@ class _DetailsPageState extends State<DetailsPage> {
             items: [
               BottomNavigationBarItem(
                   icon: Icon(Icons.home),
-                  title: Text("Pump")
+                  title: Text("Home")
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.assignment),
