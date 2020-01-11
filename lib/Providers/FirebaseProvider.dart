@@ -20,7 +20,6 @@ class FirebaseProvider with ChangeNotifier {
 
   set userData(UserDetails newValue) {
     _userData = newValue;
-    notifyListeners();
   }
 
   UserDetails get userData => _userData;
