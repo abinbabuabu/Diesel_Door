@@ -28,9 +28,6 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoginProvider>(
-          create: (_) => LoginProvider.instance(),
-        ),
         ChangeNotifierProvider<FirebaseProvider>(
           create: (_) => FirebaseProvider.instance(),
         ),
@@ -46,7 +43,7 @@ class MyApp extends StatelessWidget {
             fontFamily: "Montserrat",
             primaryColor: Color(0xFF265FFB),
             accentColor: Color(0xFFFAC702)),
-        home: HomePage(),
+        home: LoginPage(),
         routes: {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),

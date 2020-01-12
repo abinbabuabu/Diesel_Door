@@ -4,13 +4,14 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
+import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 
 class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
   String clock = "00:00";
-
 
   @override
   _OtpPageState createState() => _OtpPageState();
@@ -54,7 +55,6 @@ class _OtpPageState extends State<OtpPage> {
           value == ConnectivityResult.wifi) _connectivity = true;
     });
 
-
     _subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -74,25 +74,10 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<LoginProvider>(context);
-    var auth = provider.auth;
-    var phoneNumber = provider.phoneNumber;
+    autoCodeRetrieve();
 
-    auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: Duration(seconds: 20),
-        verificationCompleted: provider.verificationCompleted,
-        verificationFailed: provider.verificationFailed,
-        codeSent: provider.codeSent,
-        codeAutoRetrievalTimeout: provider.codeAutoRetrievalTimeout);
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
-
-    if(provider.error != null){
-      print("called");
-      _displaySnackBar(context, provider.error);
-      provider.error = null;
-    }
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -150,7 +135,7 @@ class _OtpPageState extends State<OtpPage> {
                             actionButtonsEnabled: false,
                             onSubmit: (number) {
                               _otp = number;
-                              provider.SignInWithPhoneNumber(_otp);
+                              signInWithSms(_otp);
                             },
                           ),
                         ),
@@ -165,9 +150,11 @@ class _OtpPageState extends State<OtpPage> {
                             onPressed: () {
                               if (_connectivity) {
                                 _time.cancel();
-                                provider.SignInWithPhoneNumber(_otp);
+                                widget.clock ="";
+                                signInWithSms(_otp);
                               } else {
-                                _displaySnackBar(context,"No Internet Connection");
+                                _displaySnackBar(
+                                    context, "No Internet Connection");
                               }
                             },
                             child: Text(
@@ -190,11 +177,26 @@ class _OtpPageState extends State<OtpPage> {
     );
   }
 
-  void _displaySnackBar(BuildContext context,String text) {
+  void _displaySnackBar(BuildContext context, String text) {
     FocusScope.of(context).unfocus();
     final snackbar = SnackBar(
       content: Text(text),
     );
     _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+  autoCodeRetrieve() {
+    FirebasePhoneAuth.stateStream.listen((state) {
+      if (state == PhoneAuthState.Verified) {
+        Navigator.of(context)
+            .pushReplacement(SlideRightRoute(page: DetailsPage()));
+      }
+      if (state == PhoneAuthState.Failed)
+        debugPrint("Seems there is an issue with it");
+    });
+  }
+
+  signInWithSms(String sms) {
+    FirebasePhoneAuth.signInWithPhoneNumber(sms);
   }
 }

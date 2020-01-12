@@ -1,147 +1,108 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-enum Status {
-  Uninitialized,
-  Authenticated,
-  Authenticating,
-  Unauthenticated,
-  PhoneNumberEntered,
-  AuthenticatedNewUser
-}
+enum PhoneAuthState { Started, CodeSent, CodeResent, Verified, Failed, Error, AutoRetrievalTimeOut,newUser}
 
-class LoginProvider with ChangeNotifier {
-  //Variables
-  FirebaseAuth _auth;
-  FirebaseUser _user;
-  String _phoneNumber;
-  Status _status = Status.Uninitialized;
-  static String _verificationId;
-  String _error;
+class FirebasePhoneAuth {
+  static FirebaseAuth firebaseAuth;
+  static var _authCredential, actualCode, phone, status;
+  static StreamController<String> statusStream = StreamController();
+  static StreamController<PhoneAuthState> phoneAuthState = StreamController(sync: true);
+  static Stream stateStream = phoneAuthState.stream.asBroadcastStream();
 
-  String get error => _error;
 
-  set error(String value) {
-    _error = value;
-    notifyListeners();
+  static instantiate({String phoneNumber}) async {
+    firebaseAuth = await FirebaseAuth.instance;
+    phone = phoneNumber;
+    startAuth();
   }
 
-  PhoneCodeSent _codeSent;
-  PhoneCodeAutoRetrievalTimeout _codeAutoRetrievalTimeout;
-  PhoneVerificationFailed _verificationFailed;
-  PhoneVerificationCompleted _verificationCompleted;
+  static startAuth() {
+    statusStream.stream
+        .listen((String status) => debugPrint("PhoneAuth: " + status));
 
-  //Getters
-
-  static String get verificationId => _verificationId;
-
-  PhoneCodeSent get codeSent => _codeSent;
-
-  PhoneCodeAutoRetrievalTimeout get codeAutoRetrievalTimeout =>
-      _codeAutoRetrievalTimeout;
-
-  PhoneVerificationFailed get verificationFailed => _verificationFailed;
-
-  PhoneVerificationCompleted get verificationCompleted =>
-      _verificationCompleted;
-
-  String get phoneNumber => _phoneNumber;
-
-  Status get status => _status;
-
-  FirebaseUser get user => _user;
-
-  FirebaseAuth get auth => _auth;
-
-  //Setters
-
-  set phoneNumber(String newValue) {
-    _phoneNumber = "+91" + newValue;
-    _status = Status.PhoneNumberEntered;
-    notifyListeners();
+    firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phone,
+        timeout: Duration(seconds: 60),
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
   }
 
-  //instance
+  static final PhoneCodeSent codeSent =
+      (String verificationId, [int forceResendingToken]) async {
+    actualCode = verificationId;
+    addStatus("\nEnter the code sent to " + phone);
+    addState(PhoneAuthState.CodeSent);
+  };
 
-  LoginProvider.instance() : _auth = FirebaseAuth.instance {
-    _auth.onAuthStateChanged.listen(_onAuthStateChanged);
+  static final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+      (String verificationId) {
+    actualCode = verificationId;
+    addStatus("\nAuto retrieval time out");
+    addState(PhoneAuthState.AutoRetrievalTimeOut);
+  };
 
-    _codeSent = (String verificationId, [int forceResendingToken]) async {
-      _verificationId = verificationId;
-    };
+  static final PhoneVerificationFailed verificationFailed =
+      (AuthException authException) {
+    addStatus('${authException.message}');
+    addState(PhoneAuthState.Error);
+    if (authException.message.contains('not authorized'))
+      addStatus('App not authroized');
+    else if (authException.message.contains('Network'))
+      addStatus('Please check your internet connection and try again');
+    else
+      addStatus('Something has gone wrong, please try later ' +
+          authException.message);
+  };
 
-    _codeAutoRetrievalTimeout = (String verificationId) {
-      _verificationId = verificationId;
-    };
+  static final PhoneVerificationCompleted verificationCompleted =
+      (AuthCredential auth) {
+    addStatus('Auto retrieving verification code');
 
-    _verificationFailed = (AuthException authException) {
-      _status = Status.Unauthenticated;
-      print(authException.message);
-      notifyListeners();
-    };
-
-    _verificationCompleted = (AuthCredential auth) {
-      _auth.signInWithCredential(auth).then((AuthResult value) {
-        if (value.user != null) {
-          if (value.additionalUserInfo.isNewUser) {
-            print("New User");
-            _status = Status.AuthenticatedNewUser;
-          } else {
-            _status = Status.Authenticated;
-          }
-        } else {
-          _status = Status.Unauthenticated;
-        }
-      }).catchError((onError) {
-        error = onError.toString();
-        _status = Status.Unauthenticated;
-      });
-    };
-  }
-
-  Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
-    if (firebaseUser == null) {
-      _status = Status.Unauthenticated;
-      print("UnAuthenicated from Auth state");
-    } else {
-      _user = firebaseUser;
-      if (firebaseUser.metadata.lastSignInTime ==
-          firebaseUser.metadata.creationTime) {
-        print(firebaseUser.metadata.lastSignInTime);
-        print(firebaseUser.metadata.creationTime);
-        print("new User From Auth State");
-        _status = Status.AuthenticatedNewUser;
+    firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
+      if (value.user != null) {
+        addStatus(status = 'Authentication successful');
+        addState(PhoneAuthState.Verified);
+        onAuthenticationSuccessful();
       } else {
-        print("Authenticated from Firebase");
-        _status = Status.Authenticated;
+        addState(PhoneAuthState.Failed);
+        addStatus('Invalid code/invalid authentication');
       }
-    }
-    notifyListeners();
+    }).catchError((error) {
+      addState(PhoneAuthState.Error);
+      addStatus('Something has gone wrong, please try later $error');
+    });
+  };
+
+  static void signInWithPhoneNumber(String smsCode) async {
+    _authCredential = PhoneAuthProvider.getCredential(
+        verificationId: actualCode, smsCode: smsCode);
+
+    firebaseAuth
+        .signInWithCredential(_authCredential)
+        .then((user) async {
+      addStatus('Authentication successful');
+      addState(PhoneAuthState.Verified);
+      onAuthenticationSuccessful();
+    }).catchError((error) {
+      addState(PhoneAuthState.Error);
+      addStatus('Something has gone wrong, please try later(signInWithPhoneNumber) $error');
+    });
   }
 
-  void SignInWithPhoneNumber(String smsCode) async {
-    try {
-      var _authCredential = PhoneAuthProvider.getCredential(
-          verificationId: _verificationId, smsCode: smsCode);
+  static onAuthenticationSuccessful() {}
 
-      await _auth.signInWithCredential(_authCredential).catchError((onError) {
-        error = "Invalid Code";
-      }).then((onValue) {
-        if (onValue != null) {
-          print(onValue.user.phoneNumber);
-          print("Logged IN ");
-          _status = Status.Authenticated;
-          notifyListeners();
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
+  static addState(PhoneAuthState state){
+    phoneAuthState.sink.add(state);
   }
 
-  Future<dynamic> logout() async {
-    return _auth.signOut();
+  static void addStatus(String s) {
+    statusStream.sink.add(s);
   }
+  
+
 }

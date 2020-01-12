@@ -130,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   UserDetails _createDataUser(
       String name, String organisation, String gst, String email) {
-    var phone = Provider.of<LoginProvider>(context).phoneNumber;
-    return UserDetails(name, phone, gst, organisation, email);
+    //var phone = Provider.of<LoginProvider>(context).phoneNumber;
+    return UserDetails(name, "", gst, organisation, email);
   }
 }

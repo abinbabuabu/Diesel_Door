@@ -4,6 +4,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
+import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
+import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -160,8 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             if (phone.length == 10) {
                               if (_connectivity) {
-                                Provider.of<LoginProvider>(context)
-                                    .phoneNumber = phone;
+                                 startPhoneAuth(phone);
                               } else {
                                 _displaySnackBar(context);
                                 print("No internet");
@@ -193,6 +194,20 @@ class _LoginPageState extends State<LoginPage> {
       content: Text("No Internet Connection"),
     );
     _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+  startPhoneAuth(String phone){
+    FirebasePhoneAuth.instantiate(
+        phoneNumber:"+91"+phone);
+
+    FirebasePhoneAuth.stateStream.listen((state) {
+      if (state == PhoneAuthState.CodeSent) {
+        Navigator.of(context).pushReplacement(SlideRightRoute(page: OtpPage()));
+      }
+      if (state == PhoneAuthState.Failed)
+        debugPrint("Seems there is an issue with it");
+    });
+
   }
 }
 

@@ -25,9 +25,9 @@ class IconedText extends StatelessWidget {
                 onTap: (){
                   print("clicked");
                   if(islogout){
-                    Provider.of<LoginProvider>(context).logout().then((value){
-                     // Navigator.pushReplacement(context, SlideRightRoute(page: HomePage()));
-                    });
+//                    Provider.of<LoginProvider>(context).logout().then((value){
+//                     // Navigator.pushReplacement(context, SlideRightRoute(page: HomePage()));
+//                    });
                   }
                 },
                 splashColor: Colors.blueGrey,
