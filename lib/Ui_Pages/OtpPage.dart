@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
@@ -190,16 +191,17 @@ class _OtpPageState extends State<OtpPage> {
   autoCodeRetrieve() {
     FirebasePhoneAuth.stateStream.listen((state) {
       if (state == PhoneAuthState.Verified) {
-        Future.delayed(Duration.zero, () {
-          Navigator.of(context).pushReplacementNamed(DetailsPage.routeName);
-        });
+        Navigator.of(_scaffoldKey.currentContext)
+            .pushReplacementNamed(DetailsPage.routeName);
       }
       if (state == PhoneAuthState.Failed) {
         debugPrint("Seems there is an issue with it");
       }
       if (state == PhoneAuthState.newUser) {
-        Future.delayed(Duration.zero, () {
-          Navigator.of(context).push(SlideRightRoute(page: ProfilePage()));
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(_scaffoldKey.currentContext)
+              .push(SlideRightRoute(page: ProfilePage()));
+          return;
         });
       }
     });
