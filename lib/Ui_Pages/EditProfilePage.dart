@@ -18,7 +18,7 @@ class EditProfile extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.only(top: 16.0),
+              margin: EdgeInsets.only(top: 16.0,right: 8.0,left: 8.0),
               child: Column(
                 children: <Widget>[
                   Container(
