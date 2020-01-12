@@ -7,8 +7,6 @@ import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/small_ui_components/RoundedTextField.dart';
 import 'package:provider/provider.dart';
 
-import '../Providers/LoginProvider.dart';
-
 class ProfilePage extends StatefulWidget {
   static const routeName = "ProfilePage";
   @override

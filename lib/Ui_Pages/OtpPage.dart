@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:provider/provider.dart';
 
 class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
@@ -46,6 +46,7 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
+    autoCodeRetrieve();
     if (mounted) {
       _time = Timer.periodic(Duration(milliseconds: 1000), timer);
     }
@@ -74,8 +75,7 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    autoCodeRetrieve();
-
+    print("Build Called");
     double height = MediaQuery.of(context).size.height;
     double layoutOneHeight = height / 1.5;
     return Scaffold(
@@ -130,12 +130,14 @@ class _OtpPageState extends State<OtpPage> {
                         child: Container(
                           padding: EdgeInsets.only(right: 20.0),
                           child: PinPut(
+                            autoFocus: true,
+                            keyboardType: TextInputType.number,
+                            keyboardAction: TextInputAction.done,
                             fieldsCount: 6,
                             unFocusWhen: false,
                             actionButtonsEnabled: false,
                             onSubmit: (number) {
                               _otp = number;
-                              signInWithSms(_otp);
                             },
                           ),
                         ),
@@ -150,7 +152,7 @@ class _OtpPageState extends State<OtpPage> {
                             onPressed: () {
                               if (_connectivity) {
                                 _time.cancel();
-                                widget.clock ="";
+                                widget.clock = "";
                                 signInWithSms(_otp);
                               } else {
                                 _displaySnackBar(
@@ -188,15 +190,22 @@ class _OtpPageState extends State<OtpPage> {
   autoCodeRetrieve() {
     FirebasePhoneAuth.stateStream.listen((state) {
       if (state == PhoneAuthState.Verified) {
-        Navigator.of(context)
-            .pushReplacement(SlideRightRoute(page: DetailsPage()));
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).pushReplacementNamed(DetailsPage.routeName);
+        });
       }
-      if (state == PhoneAuthState.Failed)
+      if (state == PhoneAuthState.Failed) {
         debugPrint("Seems there is an issue with it");
+      }
+      if (state == PhoneAuthState.newUser) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(SlideRightRoute(page: ProfilePage()));
+        });
+      }
     });
   }
+}
 
-  signInWithSms(String sms) {
-    FirebasePhoneAuth.signInWithPhoneNumber(sms);
-  }
+signInWithSms(String sms) {
+  FirebasePhoneAuth.signInWithPhoneNumber(sms);
 }

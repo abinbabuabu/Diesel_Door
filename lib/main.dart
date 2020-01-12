@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
-import 'package:petrol_pump/Ui_Pages/EditProfilePage.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
 import 'Providers/FirebaseProvider.dart';
-import 'Providers/LoginProvider.dart';
 import 'Providers/MapProvider.dart';
 
 void main() => runApp(MyApp());
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
             fontFamily: "Montserrat",
             primaryColor: Color(0xFF265FFB),
             accentColor: Color(0xFFFAC702)),
-        home: LoginPage(),
+        home: HomePage(),
         routes: {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),

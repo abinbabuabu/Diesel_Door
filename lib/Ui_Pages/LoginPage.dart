@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/OtpPage.dart';
 import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginPage';
@@ -136,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 52,
                         width: double.infinity,
                         child: TextField(
+                          textInputAction: TextInputAction.send,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(10)
                           ],
@@ -197,9 +197,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   startPhoneAuth(String phone){
-    FirebasePhoneAuth.instantiate(
-        phoneNumber:"+91"+phone);
-
+    FirebasePhoneAuth.startAuth(phoneNumber: "+91"+phone);
     FirebasePhoneAuth.stateStream.listen((state) {
       if (state == PhoneAuthState.CodeSent) {
         Navigator.of(context).pushReplacement(SlideRightRoute(page: OtpPage()));

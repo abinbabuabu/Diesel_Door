@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:petrol_pump/Ui_Pages/HomePage.dart';
+import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 
 import '../Providers/LoginProvider.dart';
 
@@ -25,9 +26,8 @@ class IconedText extends StatelessWidget {
                 onTap: (){
                   print("clicked");
                   if(islogout){
-//                    Provider.of<LoginProvider>(context).logout().then((value){
-//                     // Navigator.pushReplacement(context, SlideRightRoute(page: HomePage()));
-//                    });
+                    FirebasePhoneAuth.logOut();
+                    Navigator.of(context).push(FadeRoute(page: HomePage()));
                   }
                 },
                 splashColor: Colors.blueGrey,
