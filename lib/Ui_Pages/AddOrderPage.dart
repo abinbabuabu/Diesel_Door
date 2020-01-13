@@ -5,6 +5,7 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
 import 'package:petrol_pump/Providers/MapProvider.dart';
 import 'package:petrol_pump/small_ui_components/DoneNotification.dart';
@@ -12,15 +13,13 @@ import 'package:petrol_pump/small_ui_components/QuantityPicker.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-
-
   @override
   _OrderPageState createState() => _OrderPageState();
 }
 
 class _OrderPageState extends State<OrderPage> {
   String _orderDate;
-  int _quantity;
+  int _quantity = 20;
   bool _connectivity = false;
   StreamSubscription _subscription;
 
@@ -40,7 +39,7 @@ class _OrderPageState extends State<OrderPage> {
         .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.mobile ||
           result == ConnectivityResult.wifi) {
-          _connectivity = true;
+        _connectivity = true;
       }
     });
   }
@@ -59,20 +58,14 @@ class _OrderPageState extends State<OrderPage> {
         _current.month.toString() +
         "-" +
         _current.year.toString();
-    _quantity = 20;
+    print(_quantity);
 
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
         child: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.only(bottom: 16.0),
           child: Stack(
             children: <Widget>[
@@ -86,9 +79,7 @@ class _OrderPageState extends State<OrderPage> {
                   Center(
                     child: Text("Order Details",
                         style: TextStyle(
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 20)),
                   ),
                   SizedBox(
@@ -96,9 +87,7 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                   DatePickerTimeline(
                     DateTime.now(),
-                    selectionColor: Theme
-                        .of(context)
-                        .accentColor,
+                    selectionColor: Theme.of(context).accentColor,
                     onDateChange: (date) {
                       _orderDate = date.day.toString() +
                           "-" +
@@ -111,23 +100,20 @@ class _OrderPageState extends State<OrderPage> {
                     height: 30,
                   ),
                   Text(
-                    "Quantity",
+                    "Quantity(In Liters)",
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Container(
-                    alignment: Alignment.center,
-                    child: Counter(
-                      minValue: 20,
-                      initialValue: 20,
-                      maxValue: 2000,
-                      onChanged: (value) {
-                        _quantity = value;
-                      },
-                    ),
-                  ),
+                      alignment: Alignment.center,
+                      child: NumberPicker.integer(
+                          initialValue: _quantity,
+                          minValue: 20,
+                          maxValue: 500,
+                          onChanged: (value) =>setState(()=> _quantity = value))
+                          ),
                   SizedBox(
                     height: 8,
                   )
@@ -137,15 +123,13 @@ class _OrderPageState extends State<OrderPage> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   margin:
-                  EdgeInsets.only(right: 16.0, left: 16.0, bottom: 32.0),
+                      EdgeInsets.only(right: 16.0, left: 16.0, bottom: 32.0),
                   child: ButtonTheme(
                     height: 43,
                     padding: EdgeInsets.only(right: 16.0, left: 16.0),
                     minWidth: double.infinity,
                     child: RaisedButton(
-                      color: Theme
-                          .of(context)
-                          .accentColor,
+                      color: Theme.of(context).accentColor,
                       onPressed: () {
                         if (_connectivity) {
                           uploadAndDisplayDialog(context);
@@ -183,10 +167,7 @@ class _OrderPageState extends State<OrderPage> {
     var mapProvider = Provider.of<MapProvider>(context);
 
     var orderData = mapProvider.orderData;
-    orderData.orderId = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
+    orderData.orderId = DateTime.now().millisecondsSinceEpoch.toString();
     orderData.orderDate = _orderDate.toString();
     orderData.quantity = _quantity.toString();
 
@@ -201,10 +182,8 @@ class _OrderPageState extends State<OrderPage> {
           Navigator.of(context).pop();
         });
       });
-    }
-    else {
+    } else {
       _displaySnackBar(context, "Error ! try again");
     }
   }
-
 }
