@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/small_ui_components/IconedText.dart';
 import 'package:petrol_pump/small_ui_components/ProfileCard.dart';
 import 'package:petrol_pump/small_ui_components/loadingCardProfile.dart';
@@ -54,14 +55,11 @@ class _PersonalisePageState extends State<PersonalisePage> {
               ),
               SizedBox(height: 100),
               IconedText(
-                icon: Icons.contact_mail,
-                text: "My Addresses",
-                islogout: false,
-              ),
-              IconedText(
                 icon: Icons.arrow_back,
                 text: "Logout",
-                islogout: true,
+                islogout: true, listener: () {
+                  Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+              },
               )
             ],
           ),

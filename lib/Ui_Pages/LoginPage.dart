@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             if (phone.length == 10) {
                               if (_connectivity) {
-                                 startPhoneAuth(phone);
+                                 startPhoneAuth(phone,context);
                               } else {
                                 _displaySnackBar(context);
                                 print("No internet");
@@ -196,11 +196,11 @@ class _LoginPageState extends State<LoginPage> {
     _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
-  startPhoneAuth(String phone){
+  startPhoneAuth(String phone,BuildContext navcontext){
     FirebasePhoneAuth.startAuth(phoneNumber: "+91"+phone);
     FirebasePhoneAuth.stateStream.listen((state) {
       if (state == PhoneAuthState.CodeSent) {
-        Navigator.of(context).pushReplacement(SlideRightRoute(page: OtpPage()));
+        Navigator.of(_scaffoldKey.currentContext).pushReplacement(SlideRightRoute(page: OtpPage()));
       }
       if (state == PhoneAuthState.Failed)
         debugPrint("Seems there is an issue with it");

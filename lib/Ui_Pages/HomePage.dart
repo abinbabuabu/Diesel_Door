@@ -17,40 +17,61 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  StreamSubscription _streamSubscription;
 
   Future<FirebaseUser> user;
 
   @override
   Widget build(BuildContext context) {
     FirebasePhoneAuth.instantiate();
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 800), () {
       print("LoginStatus Called");
-      checkLoginStatus(context);
-
+      checkLoginStatus(_scaffoldKey.currentContext);
     });
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
-        child: Center(
-          child: Text("Welcome"),
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+                width: 80,
+                height: 80,
+                child: Image.asset("assets/logoe.png")),
+            SizedBox(height: 30,),
+            Text("Diesel Door Delivery",style: TextStyle(fontSize: 20,color: Color(0xFF265FFB)),)
+          ],
         ),
       ),
     );
   }
 
-  checkLoginStatus(BuildContext context) {
-    FirebasePhoneAuth.stateStream.listen((state) {
+   void checkLoginStatus(BuildContext Navcontext) {
+   _streamSubscription = FirebasePhoneAuth.stateStream.listen((state) {
+     print("called Stream");
       if (state == PhoneAuthState.Failed) {
-        Navigator.of(context)
-            .pushReplacement(SlideRightRoute(page: LoginPage()));
+       Future.delayed(Duration(seconds: 1),(){
+          Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(LoginPage.routeName);
+       });
       }
       if (state == PhoneAuthState.Verified) {
-        SchedulerBinding.instance.addPostFrameCallback((_){
-          Navigator.of(context)
-              .pushReplacement(SlideRightRoute(page: DetailsPage()));
-          return;
+        Future.delayed(Duration(seconds: 1),(){
+          Navigator.of(Navcontext)
+              .pushReplacementNamed(DetailsPage.routeName);
         });
 
       }
     });
   }
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    _streamSubscription =null;
+    super.dispose();
+  }
 }
+
+

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/MapPage.dart';
 import 'package:petrol_pump/Ui_Pages/OrdersPage.dart';
 import 'package:petrol_pump/Ui_Pages/PersonalisePage.dart';
@@ -25,6 +26,11 @@ class _DetailsPageState extends State<DetailsPage> {
     });
   }
 
+  @override
+  void initState() {
+    FirebasePhoneAuth.onAuthenticationSuccessful();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

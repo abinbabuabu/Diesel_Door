@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_pump/Listeners.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 
 import '../Providers/LoginProvider.dart';
 
+
+
 class IconedText extends StatelessWidget {
   String text;
   var icon;
   bool islogout;
+  final ButtonClick listener;
 
-  IconedText({@required this.text,@required this.icon, @required this.islogout});
+  IconedText({@required this.text,@required this.icon, @required this.islogout,@required this.listener});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class IconedText extends StatelessWidget {
                   print("clicked");
                   if(islogout){
                     FirebasePhoneAuth.logOut();
-                    Navigator.of(context).push(FadeRoute(page: HomePage()));
+                    listener();
                   }
                 },
                 splashColor: Colors.blueGrey,

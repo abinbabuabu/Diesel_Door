@@ -18,11 +18,10 @@ class FirebasePhoneAuth {
   static FirebaseAuth firebaseAuth;
   static var _authCredential, actualCode, phone, status;
 
-  static StreamController<String> statusStream = StreamController();
+  static StreamController<String> statusStream;
 
-  static StreamController<PhoneAuthState> phoneAuthState =
-      StreamController(sync: true);
-  static Stream stateStream = phoneAuthState.stream.asBroadcastStream();
+  static StreamController<PhoneAuthState> phoneAuthState;
+  static Stream stateStream;
 
   static void AuthStateChanged(FirebaseUser user) {
     if (user == null) {
@@ -35,7 +34,6 @@ class FirebasePhoneAuth {
       } else {
         addStatus("Logging In ");
         addState(PhoneAuthState.Verified);
-        onAuthenticationSuccessful();
       }
     }
   }
@@ -43,6 +41,9 @@ class FirebasePhoneAuth {
   static instantiate() async {
     firebaseAuth = await FirebaseAuth.instance;
     firebaseAuth.onAuthStateChanged.listen(AuthStateChanged);
+    statusStream = StreamController();
+    phoneAuthState = StreamController(sync: true);
+    stateStream = phoneAuthState.stream.asBroadcastStream();
   }
 
   static startAuth({String phoneNumber}) {
@@ -120,8 +121,10 @@ class FirebasePhoneAuth {
   }
 
   static onAuthenticationSuccessful() {
-      //statusStream.close();
-     // phoneAuthState.close();
+    firebaseAuth = null;
+    statusStream.close();
+    phoneAuthState.close();
+    print("Called close");
   }
 
   static addState(PhoneAuthState state) {
@@ -132,8 +135,8 @@ class FirebasePhoneAuth {
     statusStream.sink.add(s);
   }
 
-  static logOut(){
-    firebaseAuth.signOut();
+  static logOut() {
+    FirebaseAuth.instance.signOut();
     firebaseAuth = null;
   }
 }

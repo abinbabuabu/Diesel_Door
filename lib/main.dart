@@ -4,6 +4,7 @@ import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
+import 'package:petrol_pump/Ui_Pages/UILoading.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),
           DetailsPage.routeName: (context) => DetailsPage(),
-          HomePage.routeName: (context) => HomePage()
+          HomePage.routeName: (context) => HomePage(),
+          UILoading.routeName:(context) => UILoading()
         },
       ),
     );

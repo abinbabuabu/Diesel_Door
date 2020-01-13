@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
+import 'package:petrol_pump/Ui_Pages/UILoading.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
-import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+
 
 class OtpPage extends StatefulWidget {
   static const routeName = '/otpPage';
@@ -90,6 +91,7 @@ class _OtpPageState extends State<OtpPage> {
                 Stack(
                   children: <Widget>[
                     Container(
+                      padding: EdgeInsets.only(top:50),
                       margin: EdgeInsets.only(bottom: 16),
                       color: Color(0xFFDEE7FF),
                       height: layoutOneHeight,
@@ -139,6 +141,7 @@ class _OtpPageState extends State<OtpPage> {
                             actionButtonsEnabled: false,
                             onSubmit: (number) {
                               _otp = number;
+                              signInWithSms(_otp);
                             },
                           ),
                         ),
@@ -191,18 +194,14 @@ class _OtpPageState extends State<OtpPage> {
   autoCodeRetrieve() {
     FirebasePhoneAuth.stateStream.listen((state) {
       if (state == PhoneAuthState.Verified) {
-        Navigator.of(_scaffoldKey.currentContext)
-            .pushReplacementNamed(DetailsPage.routeName);
+        FocusScope.of(context).unfocus();
+          Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(UILoading.routeName);
       }
       if (state == PhoneAuthState.Failed) {
-        debugPrint("Seems there is an issue with it");
+        Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(LoginPage.routeName);
       }
       if (state == PhoneAuthState.newUser) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(_scaffoldKey.currentContext)
-              .push(SlideRightRoute(page: ProfilePage()));
-          return;
-        });
+        Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(ProfilePage.routeName);
       }
     });
   }

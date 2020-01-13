@@ -92,6 +92,7 @@ class _MapPageState extends State<MapPage> {
                   },
                   child: AbsorbPointer(
                     child: TextField(
+                      autofocus: false,
                       onTap: () {},
                       style: TextStyle(fontSize: 14.0),
                       decoration: InputDecoration(
