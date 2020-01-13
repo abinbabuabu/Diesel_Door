@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/small_ui_components/RoundedTextField.dart';
 import 'package:provider/provider.dart';
@@ -98,13 +99,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: RaisedButton(
                             color: Theme.of(context).accentColor,
                             onPressed: () {
-                              var data = _createDataUser(name, org, gst, email);
+
+                              if(_formKey.currentState.validate()) {
+                                var data = _createDataUser(name, org, gst, email);
                               Provider.of<FirebaseProvider>(context)
                                   .fireInsertUser(data)
                                   .then((value) {
+                                print(data.email);
+                                print(data.name);
+                                print(data.phone);
+                                print(data.organisation);
+                                print(data.gst);
                                 Navigator.popAndPushNamed(
                                     context, DetailsPage.routeName);
-                              });
+                                });
+
+                              }
                             },
                             child: Text(
                               "Submit",
@@ -126,9 +136,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  UserDetails _createDataUser(
+  UserDetails _createDataUser (
       String name, String organisation, String gst, String email) {
-    //var phone = Provider.of<LoginProvider>(context).phoneNumber;
-    return UserDetails(name, "", gst, organisation, email);
+    var phone = FirebasePhoneAuth.phone;
+    return UserDetails(name, phone, gst, organisation, email);
   }
 }

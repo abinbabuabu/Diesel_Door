@@ -25,7 +25,7 @@ class SearchResult {
 class UserDetails {
   String _name;
   String _organisation;
-  String _gst;
+  String _gst="";
   String _phone;
   String _email;
 

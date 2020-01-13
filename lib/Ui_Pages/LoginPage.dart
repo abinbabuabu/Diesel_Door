@@ -160,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: RaisedButton(
                           color: Theme.of(context).accentColor,
                           onPressed: () {
+                            print(_connectivity.toString());
                             if (phone.length == 10) {
                               if (_connectivity) {
                                  startPhoneAuth(phone,context);
@@ -196,16 +197,18 @@ class _LoginPageState extends State<LoginPage> {
     _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
-  startPhoneAuth(String phone,BuildContext navcontext){
-    FirebasePhoneAuth.startAuth(phoneNumber: "+91"+phone);
-    FirebasePhoneAuth.stateStream.listen((state) {
-      if (state == PhoneAuthState.CodeSent) {
-        Navigator.of(_scaffoldKey.currentContext).pushReplacement(SlideRightRoute(page: OtpPage()));
-      }
-      if (state == PhoneAuthState.Failed)
-        debugPrint("Seems there is an issue with it");
-    });
-
+  startPhoneAuth(String phone,BuildContext navcontext) {
+    if (_connectivity) {
+      FirebasePhoneAuth.startAuth(phoneNumber: "+91" + phone);
+      FirebasePhoneAuth.stateStream.listen((state) {
+        if (state == PhoneAuthState.CodeSent) {
+          Navigator.of(_scaffoldKey.currentContext).pushReplacement(
+              SlideRightRoute(page: OtpPage()));
+        }
+        if (state == PhoneAuthState.Failed)
+          debugPrint("Seems there is an issue with it");
+      });
+    }
   }
 }
 

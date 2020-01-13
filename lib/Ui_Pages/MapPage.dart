@@ -122,6 +122,9 @@ class _MapPageState extends State<MapPage> {
                       elevation: 8.0,
                       child: Icon(Icons.my_location),
                       onPressed: () {
+                        if(!provider.isGps){
+                          _displaySnackBar(context,"Turn on Gps");
+                        }
                         provider.getLocationPermission();
                       },
                     ),
@@ -143,7 +146,7 @@ class _MapPageState extends State<MapPage> {
                             provider
                                 .reverseGeocodeLatLng(provider.lastLocation);
                           } else {
-                            _displaySnackBar(context);
+                            _displaySnackBar(context,"No Internet Connection");
                           }
                         },
                         child: Text(
@@ -164,15 +167,12 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _displaySnackBar(BuildContext context) {
+  void _displaySnackBar(BuildContext context,String text) {
     FocusScope.of(context).unfocus();
     final snackbar = SnackBar(
-      content: Text("No Internet Connection"),
+      content:  Text(text),
     );
     _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
-
-
-//TODO("Remove the place Picker Dependency and Check for other Dependecy removal")
 }

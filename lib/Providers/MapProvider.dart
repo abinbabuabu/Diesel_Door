@@ -17,6 +17,7 @@ class MapProvider with ChangeNotifier {
   GoogleMapController _controller;
   LocationResult locationResult;
   OrderData _orderData;
+  bool isGps = false;
 
   OrderData get orderData => _orderData;
 
@@ -48,8 +49,9 @@ class MapProvider with ChangeNotifier {
       var permission_geo = await geolocator.checkGeolocationPermissionStatus();
       if (permission_geo == GeolocationStatus.granted) {
         print("permission Granted");
-        var isGps = await geolocator.isLocationServiceEnabled();
-        if (isGps) {
+        var Gps = await geolocator.isLocationServiceEnabled();
+        if (Gps) {
+          isGps = true;
           print("Gps Is ON");
           var position = await geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.low);
@@ -59,6 +61,7 @@ class MapProvider with ChangeNotifier {
           _addMarker(position);
           _cameraMoveMap(position);
         } else {
+          isGps = false;
           print("Gps is OFF");
         }
       }

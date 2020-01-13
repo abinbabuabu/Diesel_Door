@@ -52,7 +52,8 @@ class _HomePageState extends State<HomePage> {
    void checkLoginStatus(BuildContext Navcontext) {
    _streamSubscription = FirebasePhoneAuth.stateStream.listen((state) {
      print("called Stream");
-      if (state == PhoneAuthState.Failed) {
+     print(state);
+      if (state == PhoneAuthState.Failed ||state == PhoneAuthState.newUser) {
        Future.delayed(Duration(seconds: 1),(){
           Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(LoginPage.routeName);
        });

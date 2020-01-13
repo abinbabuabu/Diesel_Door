@@ -94,7 +94,7 @@ class FirebasePhoneAuth {
     firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
       if (value.user != null) {
         addStatus(status = 'Authentication successful');
-        addState(PhoneAuthState.Verified);
+       // addState(PhoneAuthState.Verified);
       } else {
         addState(PhoneAuthState.Failed);
         addStatus('Invalid code/invalid authentication');
@@ -111,7 +111,7 @@ class FirebasePhoneAuth {
 
     firebaseAuth.signInWithCredential(_authCredential).then((user) async {
       addStatus('Authentication successful');
-      addState(PhoneAuthState.Verified);
+      //addState(PhoneAuthState.Verified);
       onAuthenticationSuccessful();
     }).catchError((error) {
       addState(PhoneAuthState.Error);
