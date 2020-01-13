@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
+import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/small_ui_components/IconedText.dart';
 import 'package:petrol_pump/small_ui_components/ProfileCard.dart';
@@ -54,12 +55,23 @@ class _PersonalisePageState extends State<PersonalisePage> {
                 },
               ),
               SizedBox(height: 100),
-              IconedText(
-                icon: Icons.arrow_back,
-                text: "Logout",
-                islogout: true, listener: () {
-                  Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-              },
+              Container(
+                width: 200,
+                child: ButtonTheme(
+                  height: 43,
+                  child: RaisedButton(
+                    onPressed: () {
+                      FirebasePhoneAuth.logOut();
+                      Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                    },
+                    child: Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
               )
             ],
           ),

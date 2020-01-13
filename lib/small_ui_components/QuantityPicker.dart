@@ -97,36 +97,20 @@ class _CounterState extends State<Counter> {
         padding: new EdgeInsets.all(6.0),
         child: Row(
           children: <Widget>[
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: InkWell(
-                      child: Icon(
-                        Icons.arrow_drop_up,
-                        size: 30,
-                      ),
-                      onTap: _decrementCounter,
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+            Expanded(
+              child: Center(
+                child: InkWell(
+                  child: Icon(
+                    Icons.add,
+                    size: 30,
                   ),
-                  flex: 1,
+                  onTap: _decrementCounter,
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
-                Expanded(
-                  child: InkWell(
-                    child: Icon(
-                      Icons.arrow_drop_down,
-                      size: 30,
-                    ),
-                    onTap: _incrementCounter,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  flex: 2,
-                )
-              ],
+              ),
+              flex: 1,
             ),
+
             new Container(
               width: 52,
               alignment: Alignment.center,

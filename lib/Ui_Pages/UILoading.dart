@@ -8,7 +8,7 @@ class UILoading extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
    Future.delayed(Duration(seconds: 1),(){
-     Navigator.of(context).push(FadeRoute(page: DetailsPage()));
+     Navigator.of(context).pushReplacement(FadeRoute(page: DetailsPage()));
    });
     return Scaffold(body: Center(child: CircularProgressIndicator()));
   }
