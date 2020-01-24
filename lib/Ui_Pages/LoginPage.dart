@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _connectivity = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   bool _visibility = true;
   FocusNode _focusNode = FocusNode();
@@ -131,27 +132,37 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.only(left: 4.0),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 8.0, bottom: 30.0),
+                        margin: EdgeInsets.only(top: 8.0, bottom: 30.0,right: 8.0,left: 8.0),
                         height: 52,
-                        width: double.infinity,
-                        child: TextField(
-                          textInputAction: TextInputAction.send,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10)
-                          ],
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(left: 10),
-                              prefixText: "+91 ",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(color: Colors.red),
-                              ),
-                              hintText: "Phone Number"),
-                          focusNode: _focusNode,
-                          onChanged: (text) {
-                            phone = text;
-                          },
+                        width: MediaQuery.of(context).size.width,
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            validator: (value){
+                              if(value.length != 10){
+                                return "Invalid mobile number ";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.send,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10)
+                            ],
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(left: 10),
+                                prefixText: "+91 ",
+                                border: OutlineInputBorder(
+                                  gapPadding: 8,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                hintText: "Phone Number"),
+                            focusNode: _focusNode,
+                            onChanged: (text) {
+                              phone = text;
+                            },
+                          ),
                         ),
                       ),
                       ButtonTheme(
@@ -161,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Theme.of(context).accentColor,
                           onPressed: () {
                             print(_connectivity.toString());
-                            if (phone.length == 10) {
+                            if (_formKey.currentState.validate()) {
                               if (_connectivity) {
                                  startPhoneAuth(phone,context);
                               } else {

@@ -32,11 +32,28 @@ class OrdersCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double widthOfScreen = MediaQuery.of(context).size.width;
 
-    // ignore: unrelated_type_equality_checks
-    if (status.trim().toLowerCase() != "pending")
-      color = Colors.green;
-    else
-      color = Colors.red;
+    switch(status.trim().toLowerCase()){
+      case"pending":{
+        color = Colors.yellow;
+        break;
+      }
+      case"accepted":{
+        color = Colors.blue;
+        break;
+      }
+      case"declined":{
+        color = Colors.red;
+        break;
+      }
+      case"delivered":{
+        color = Colors.green;
+        break;
+      }
+      default:{
+        color = Colors.green;
+        break;
+      }
+    }
 
     return Card(
         margin: EdgeInsets.only(left: 8.0,right: 8.0,top:8.0,bottom:8.0),

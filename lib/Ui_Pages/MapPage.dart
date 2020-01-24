@@ -20,7 +20,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const LatLng _center = const LatLng(55.521563, -122.677433);
+  static const LatLng _center = const LatLng(12.9715987, 77.59456269999998);
   PredictionResult clickedResult;
   StreamSubscription _subscription;
   bool _connectivity = false;

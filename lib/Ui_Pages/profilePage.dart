@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -66,23 +67,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           margin: EdgeInsets.only(left: 14),
                         ),
                         CustomTextField(
-                            true, Icons.person, "Full Name", "", (text) {name=text;}),
+                            1, Icons.person, "Full Name", "", (text) {name=text;}),
                         CustomTextField(
-                          true,
+                          2,
                           Icons.mail,
                           "Email",
                           "",
                           (text) {email=text;},
                         ),
                         CustomTextField(
-                          true,
+                          1,
                           Icons.domain,
                           "Organisation",
                           "",
                           (text) {org=text;},
                         ),
                         CustomTextField(
-                          false,
+                          0,
                           Icons.info,
                           "Gst No",
                           "",
@@ -101,19 +102,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             onPressed: () {
 
                               if(_formKey.currentState.validate()) {
-                                var data = _createDataUser(name, org, gst, email);
-                              Provider.of<FirebaseProvider>(context)
-                                  .fireInsertUser(data)
-                                  .then((value) {
-                                print(data.email);
-                                print(data.name);
-                                print(data.phone);
-                                print(data.organisation);
-                                print(data.gst);
-                                Navigator.popAndPushNamed(
-                                    context, DetailsPage.routeName);
+                                _createDataUser(name, org, gst, email).then((data){
+                                  Provider.of<FirebaseProvider>(context)
+                                      .fireInsertUser(data)
+                                      .then((value) {
+                                    Navigator.popAndPushNamed(
+                                        context, DetailsPage.routeName);
+                                  });
                                 });
-
                               }
                             },
                             child: Text(
@@ -136,9 +132,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  UserDetails _createDataUser (
-      String name, String organisation, String gst, String email) {
-    var phone = FirebasePhoneAuth.phone;
-    return UserDetails(name, phone, gst, organisation, email);
+  Future<UserDetails> _createDataUser  (
+      String name, String organisation, String gst, String email) async {
+    var phone = await FirebaseAuth.instance.currentUser();
+    return UserDetails(name, phone.phoneNumber, gst, organisation, email);
   }
 }

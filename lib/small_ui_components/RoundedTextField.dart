@@ -32,7 +32,6 @@ class RoundedTextField extends StatelessWidget {
   }
 }
 
-
 class CustomTextField extends StatelessWidget {
   CustomTextField(this._required,this._iconValue,this._hintText,this.text,this.listener):super();
 
@@ -40,7 +39,7 @@ class CustomTextField extends StatelessWidget {
   final String _hintText;
   String text;
   final TextChangeListener listener;
-  final bool _required;
+  final int _required;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         initialValue: text,
         onChanged: (value){
-          if(_required) {
+          if(_required==1) {
             if (value.isNotEmpty)
               listener(value);
           }
@@ -61,11 +60,18 @@ class CustomTextField extends StatelessWidget {
           }
         },
         validator: (value){
-          if(_required) {
+          if(_required != 0) {
             if (value.isEmpty) {
               return "Required Field";
             }
+            if(_required == 2){
+              bool match= RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(value);
+              if(!match) {
+                return "Valid email required";
+              }
+            }
           }
+
           return null;
         },
         decoration: InputDecoration(

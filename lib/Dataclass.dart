@@ -23,11 +23,11 @@ class SearchResult {
 // User Details Data class used for uploading and retrieve the data from the firebase
 
 class UserDetails {
-  String _name;
-  String _organisation;
+  String _name="";
+  String _organisation="";
   String _gst="";
-  String _phone;
-  String _email;
+  String _phone="";
+  String _email="";
 
   UserDetails(
       this._name, this._phone, this._gst, this._organisation, this._email);
@@ -134,3 +134,5 @@ class OrderData {
   }
 
 }
+
+enum TextType{email,required,notrequired}

@@ -20,6 +20,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   String _orderDate;
   int _quantity = 20;
+  DateTime _current = DateTime.now();
   bool _connectivity = false;
   StreamSubscription _subscription;
 
@@ -52,7 +53,6 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _current = DateTime.now();
     _orderDate = _current.day.toString() +
         "-" +
         _current.month.toString() +
@@ -86,9 +86,10 @@ class _OrderPageState extends State<OrderPage> {
                     height: 30,
                   ),
                   DatePickerTimeline(
-                    DateTime.now(),
+                    _current,
                     selectionColor: Theme.of(context).accentColor,
                     onDateChange: (date) {
+                      _current = date;
                       _orderDate = date.day.toString() +
                           "-" +
                           date.month.toString() +

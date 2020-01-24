@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
+import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
 import 'package:petrol_pump/Ui_Pages/UILoading.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
@@ -197,11 +198,14 @@ class _OtpPageState extends State<OtpPage> {
         FocusScope.of(context).unfocus();
           Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(UILoading.routeName);
       }
-      if (state == PhoneAuthState.Failed) {
-        Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(LoginPage.routeName);
-      }
-      if (state == PhoneAuthState.newUser) {
+      else if (state == PhoneAuthState.newUser) {
         Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(ProfilePage.routeName);
+      }
+      else{
+        _displaySnackBar(context, "Login failed!  Try again later ");
+        Future.delayed(Duration(seconds: 8),(){
+          Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(HomePage.routeName);
+        }) ;
       }
     });
   }

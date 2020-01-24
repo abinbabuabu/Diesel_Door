@@ -2,14 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 class FirebaseProvider with ChangeNotifier {
   DatabaseReference _db;
-  String sample = "hello";
   FirebaseUser _user;
   bool _isUserAdded = false;
-  UserDetails _userData = UserDetails("abin", "smaple", "sample", "India", "");
+  UserDetails _userData = UserDetails("", "", "", "", "");
   bool _orderIsEmpty = false;
+  var _uuid = Uuid();
 
   bool get orderIsEmpty => _orderIsEmpty;
 
@@ -34,8 +36,6 @@ class FirebaseProvider with ChangeNotifier {
 
   Future<bool> fireInsertUser(UserDetails user) async {
     _user = await FirebaseAuth.instance.currentUser();
-    print("Called");
-    print(user.phone);
     _db
         .child("Users")
         .child(_user.uid)
@@ -68,11 +68,14 @@ class FirebaseProvider with ChangeNotifier {
 
   Future<void> fireInsertOrder(OrderData orderData) async {
     _user = await FirebaseAuth.instance.currentUser();
+    var pushKey =
+        _db.child("Users").child(_user.uid).child("Orders").push().key;
+
     _db
         .child("Users")
         .child(_user.uid)
         .child("Orders")
-        .push()
+        .child(pushKey)
         .set(<String, String>{
       "orderId": orderData.orderId,
       "orderDate": orderData.orderDate,
@@ -82,10 +85,12 @@ class FirebaseProvider with ChangeNotifier {
       "locality": orderData.locality,
       "latLng": orderData.latLng,
       "formattedAddress": orderData.formattedAddress,
-      "placeId": orderData.placeId
+      "placeId": orderData.placeId,
+      "pushKey":pushKey,
+      "timeStamp":DateTime.now().toString(),
     });
 
-    _db.child("Orders").push().set(<String, String>{
+    _db.child("Orders").child(pushKey).set(<String, String>{
       "orderId": orderData.orderId,
       "orderDate": orderData.orderDate,
       "status": orderData.status,
@@ -95,30 +100,32 @@ class FirebaseProvider with ChangeNotifier {
       "latLng": orderData.latLng,
       "formattedAddress": orderData.formattedAddress,
       "placeId": orderData.placeId,
-      "userId":_user.uid
+      "userId": _user.uid,
+      "pushKey":pushKey,
+      "timeStamp":DateTime.now().toString(),
     });
+
   }
 
   Future<List<OrderData>> fireRetrieveOrders() async {
     List<OrderData> OrdersList = List();
     _user = await FirebaseAuth.instance.currentUser();
     if (_user != null) {
-      var orders = _db.child("Users").child(_user.uid).child("Orders").orderByChild("orderId");
-      var result = await orders.once().catchError((error){
-        print(error);
-      });
+      var orders = _db
+          .child("Users")
+          .child(_user.uid)
+          .child("Orders");
+      var result = await orders.once().catchError((error) {});
 
-      Map<dynamic,dynamic> _resultMap = result.value;
+      Map<dynamic, dynamic> _resultMap = result.value;
 
-      if(result.value == null){
-       orderIsEmpty = true;
-      }
-      else{
+      if (result.value == null) {
+        orderIsEmpty = true;
+      } else {
         orderIsEmpty = false;
       }
 
-
-      _resultMap.forEach((key,value){
+      _resultMap.forEach((key, value) {
         var _orderData = OrderData.fromDynamicMap(value);
         OrdersList.add(_orderData);
       });
