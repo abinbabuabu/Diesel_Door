@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_pump/Dataclass.dart';
-import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 class FirebaseProvider with ChangeNotifier {
   DatabaseReference _db;
@@ -11,7 +9,6 @@ class FirebaseProvider with ChangeNotifier {
   bool _isUserAdded = false;
   UserDetails _userData = UserDetails("", "", "", "", "");
   bool _orderIsEmpty = false;
-  var _uuid = Uuid();
 
   bool get orderIsEmpty => _orderIsEmpty;
 
@@ -83,7 +80,8 @@ class FirebaseProvider with ChangeNotifier {
       "quantity": orderData.quantity,
       "locationName": orderData.name,
       "locality": orderData.locality,
-      "latLng": orderData.latLng,
+      "lat": orderData.lat,
+      "lng":orderData.lng,
       "formattedAddress": orderData.formattedAddress,
       "placeId": orderData.placeId,
       "pushKey":pushKey,
@@ -97,7 +95,8 @@ class FirebaseProvider with ChangeNotifier {
       "quantity": orderData.quantity,
       "locationName": orderData.name,
       "locality": orderData.locality,
-      "latLng": orderData.latLng,
+      "lat": orderData.lat,
+      "lng":orderData.lng,
       "formattedAddress": orderData.formattedAddress,
       "placeId": orderData.placeId,
       "userId": _user.uid,
@@ -129,7 +128,8 @@ class FirebaseProvider with ChangeNotifier {
         var _orderData = OrderData.fromDynamicMap(value);
         OrdersList.add(_orderData);
       });
-      return OrdersList.reversed.toList();
+      OrdersList.sort((a,b) => b.orderId.compareTo(a.orderId));
+      return OrdersList;
     } else {
       return null;
     }

@@ -4,7 +4,6 @@ import 'package:petrol_pump/Dataclass.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
-import 'package:petrol_pump/small_ui_components/IconedText.dart';
 import 'package:petrol_pump/small_ui_components/ProfileCard.dart';
 import 'package:petrol_pump/small_ui_components/loadingCardProfile.dart';
 import 'package:provider/provider.dart';

@@ -9,7 +9,6 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:petrol_pump/Providers/FirebaseProvider.dart';
 import 'package:petrol_pump/Providers/MapProvider.dart';
 import 'package:petrol_pump/small_ui_components/DoneNotification.dart';
-import 'package:petrol_pump/small_ui_components/QuantityPicker.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
@@ -168,7 +167,7 @@ class _OrderPageState extends State<OrderPage> {
     var mapProvider = Provider.of<MapProvider>(context);
 
     var orderData = mapProvider.orderData;
-    orderData.orderId = DateTime.now().millisecondsSinceEpoch.toString();
+    orderData.orderId = "";
     orderData.orderDate = _orderDate.toString();
     orderData.quantity = _quantity.toString();
 

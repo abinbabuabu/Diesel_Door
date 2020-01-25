@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:petrol_pump/Providers/LoginProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
-import 'package:petrol_pump/small_ui_components/RouteAnimations.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/homePage';
@@ -53,7 +51,7 @@ class _HomePageState extends State<HomePage> {
    _streamSubscription = FirebasePhoneAuth.stateStream.listen((state) {
      print("called Stream");
      print(state);
-      if (state == PhoneAuthState.Failed ||state == PhoneAuthState.newUser) {
+      if (state == PhoneAuthState.Failed || state == PhoneAuthState.newUser) {
        Future.delayed(Duration(seconds: 1),(){
           Navigator.of(_scaffoldKey.currentContext).pushReplacementNamed(LoginPage.routeName);
        });

@@ -111,7 +111,8 @@ class OrderData {
   String quantity;
   String name = "";
   String locality = "";
-  String latLng = "";
+  String lat = "";
+  String lng ="";
   String formattedAddress;
   String placeId = "";
   String userID ="";
@@ -126,7 +127,7 @@ class OrderData {
   OrderData();
 
   OrderData.fromDynamicMap(Map<dynamic,dynamic> map){
-   orderId = map["orderId"];
+   orderId = map["orderId"].toString();
    orderDate = map["orderDate"];
    status =  map["status"];
    quantity = map["quantity"];

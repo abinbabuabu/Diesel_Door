@@ -143,7 +143,8 @@ class MapProvider with ChangeNotifier {
       //Order Data
       orderData.name = road;
       orderData.locality = locality;
-      orderData.latLng = latLng.toString();
+      orderData.lat = latLng.latitude.toString();
+      orderData.lng = latLng.longitude.toString();
       orderData.formattedAddress = result['formatted_address'];
       orderData.placeId = result['place_id'];
 
