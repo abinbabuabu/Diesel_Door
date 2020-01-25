@@ -8,12 +8,57 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:783907190284:android:7e34fdff1be7de4e37a029",
+        "android_client_info": {
+          "package_name": "com.emilda.ddd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783907190284-15ar6vlpuee4cruj48o05obntlcn580v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emilda.ddd",
+            "certificate_hash": "0a81f1ad34e21ecc3cc854321a29d547f92b7885"
+          }
+        },
+        {
+          "client_id": "783907190284-e8f0prmaj0v6ssik3jsia455l3gucn6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiiR1j3gM_PCYaMxhhfx3jGGyrkDxmsZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783907190284-e8f0prmaj0v6ssik3jsia455l3gucn6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:783907190284:android:452d3fe69ea2513f37a029",
         "android_client_info": {
           "package_name": "com.example.petrol_pump"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "783907190284-uomisobshs66cudn4rm4lv1hdd7tsn2e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.petrol_pump",
+            "certificate_hash": "0a81f1ad34e21ecc3cc854321a29d547f92b7885"
+          }
+        },
         {
           "client_id": "783907190284-e8f0prmaj0v6ssik3jsia455l3gucn6t.apps.googleusercontent.com",
           "client_type": 3
