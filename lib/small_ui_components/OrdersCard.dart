@@ -34,7 +34,7 @@ class OrdersCard extends StatelessWidget {
 
     switch(status.trim().toLowerCase()){
       case"pending":{
-        color = Colors.yellow;
+        color = Theme.of(context).accentColor;
         break;
       }
       case"accepted":{

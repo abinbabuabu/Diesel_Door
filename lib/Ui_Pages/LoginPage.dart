@@ -132,8 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.only(left: 4.0),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 8.0, bottom: 30.0,right: 8.0,left: 8.0),
-                        height: 52,
+                        margin: EdgeInsets.only(top: 8.0, bottom: 30.0,right: 2.0,left: 2.0),
                         width: MediaQuery.of(context).size.width,
                         child: Form(
                           key: _formKey,
@@ -150,13 +149,13 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
                                 prefixText: "+91 ",
                                 border: OutlineInputBorder(
-                                  gapPadding: 8,
+                                  gapPadding:8 ,
                                   borderRadius: BorderRadius.circular(20.0),
                                   borderSide: BorderSide(color: Colors.red),
                                 ),
+                                contentPadding: new EdgeInsets.symmetric(vertical: 18.0, horizontal: 10.0),
                                 hintText: "Phone Number"),
                             focusNode: _focusNode,
                             onChanged: (text) {

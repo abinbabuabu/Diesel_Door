@@ -16,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String name,gst,org,email;
+  String name,gst="",org,email;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -88,6 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           "Gst No",
                           "",
                           (text) {
+                            if(text.isNotEmpty)
                             gst=text;
                           },
                         ),

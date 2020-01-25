@@ -112,7 +112,7 @@ class _OrderPageState extends State<OrderPage> {
                       child: NumberPicker.integer(
                           initialValue: _quantity,
                           minValue: 20,
-                          maxValue: 500,
+                          maxValue: 5000,
                           onChanged: (value) =>setState(()=> _quantity = value))
                           ),
                   SizedBox(

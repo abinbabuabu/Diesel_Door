@@ -77,7 +77,7 @@ class FirebaseProvider with ChangeNotifier {
         .child("Orders")
         .child(pushKey)
         .set(<String, String>{
-      "orderId": orderData.orderId,
+      "orderId": "",
       "orderDate": orderData.orderDate,
       "status": orderData.status,
       "quantity": orderData.quantity,
@@ -91,7 +91,7 @@ class FirebaseProvider with ChangeNotifier {
     });
 
     _db.child("Orders").child(pushKey).set(<String, String>{
-      "orderId": orderData.orderId,
+      "orderId": "",
       "orderDate": orderData.orderDate,
       "status": orderData.status,
       "quantity": orderData.quantity,
@@ -114,7 +114,7 @@ class FirebaseProvider with ChangeNotifier {
       var orders = _db
           .child("Users")
           .child(_user.uid)
-          .child("Orders");
+          .child("Orders").orderByChild("orderId");
       var result = await orders.once().catchError((error) {});
 
       Map<dynamic, dynamic> _resultMap = result.value;
