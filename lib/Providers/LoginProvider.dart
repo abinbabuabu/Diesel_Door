@@ -94,7 +94,7 @@ class FirebasePhoneAuth {
     firebaseAuth.signInWithCredential(auth).then((AuthResult value) {
       if (value.user != null) {
         addStatus(status = 'Authentication successful');
-       // addState(PhoneAuthState.Verified);
+        // addState(PhoneAuthState.Verified);
       } else {
         addState(PhoneAuthState.Failed);
         addStatus('Invalid code/invalid authentication');
@@ -122,8 +122,9 @@ class FirebasePhoneAuth {
 
   static onAuthenticationSuccessful() {
     firebaseAuth = null;
-    statusStream.close();
-    phoneAuthState.close();
+    if (stateStream != null) statusStream.close();
+    if (phoneAuthState != null) phoneAuthState.close();
+
     print("Called close");
   }
 

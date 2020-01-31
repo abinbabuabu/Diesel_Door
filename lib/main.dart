@@ -4,6 +4,7 @@ import 'package:petrol_pump/Providers/GooglePlacesProvider.dart';
 import 'package:petrol_pump/Ui_Pages/DetailsPage.dart';
 import 'package:petrol_pump/Ui_Pages/HomePage.dart';
 import 'package:petrol_pump/Ui_Pages/LoginPage.dart';
+import 'package:petrol_pump/Ui_Pages/MapPage.dart';
 import 'package:petrol_pump/Ui_Pages/UILoading.dart';
 import 'package:petrol_pump/Ui_Pages/profilePage.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
             fontFamily: "Montserrat",
             primaryColor: Color(0xFF265FFB),
             accentColor: Color(0xFFFAC702)),
-        home: HomePage(),
+        home:HomePage(),
         routes: {
           LoginPage.routeName: (context) => LoginPage(),
           ProfilePage.routeName: (context) => ProfilePage(),
